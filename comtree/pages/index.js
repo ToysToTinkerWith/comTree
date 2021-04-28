@@ -1,23 +1,47 @@
+import { useAuth } from "../firebase/firebaseAuth"
+
 import Head from 'next/head'
 
-import firebase from "../firebase/firebaseInit"
+import Layout from "../components/Layout"
+import Map from "../components/Map/Map"
+import Home from "../components/Auth/Home"
 
-import Map from "../components/Map"
+export default function Root() {
 
-firebase()
+  const { user } = useAuth()
+  console.log(user)
 
-export default function Home() {
-  return (
+  if (user) {
+    return (
+      <main>
+      <Head>
+        <title>comTree</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Head>
+      <Layout>
+      <Map />
+      </Layout>
+
+  
+
+    </main>
+    )
+  }
+
+  else {
+    return (
     <main>
       <Head>
         <title>comTree</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Map />
+      <Home />
   
 
     </main>
   )
+  }
+  
 }
 
 

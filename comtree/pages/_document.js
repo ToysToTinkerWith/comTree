@@ -8,7 +8,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+          <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
           <meta name="description" content="View and take care of public trees from all across the world. Become part of a global community that cares for the trees around them." />
 
           <meta name="theme-color" content={theme.palette.primary.main} />
