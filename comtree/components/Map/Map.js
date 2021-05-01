@@ -77,7 +77,7 @@ class Map extends React.Component {
           
 
         {displayTrees.length > 0 ? displayTrees.map(tree => {
-          return <Marker key={tree.psudeoId} width={width} uid={this.props.uid} lat={tree.latitude} lng={tree.longitude} setPage={this.props.setPage} setViewTree={this.props.setViewTree} tree={tree} />
+          return <Marker key={tree.psudeoId} width={width} user={this.props.user} lat={tree.latitude} lng={tree.longitude} setPage={this.props.setPage} setTree={this.props.setTree} tree={tree} />
         }) :  null }
 
         {this.state.currentLoc.found ?

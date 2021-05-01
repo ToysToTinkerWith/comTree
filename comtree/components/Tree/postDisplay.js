@@ -1,6 +1,5 @@
 import React from "react"
-
-import { db } from "../firebase"
+import firebase from "firebase/app"
 
 import { Typography } from "@material-ui/core"
 
@@ -16,7 +15,7 @@ class PostDisplay extends React.Component {
 
     componentDidMount() {
 
-    db.collection("publicTrees").doc(this.props.treeId).collection("posts")
+    firebase.firestore().collection("publicTrees").doc(this.props.treeId).collection("posts")
     .doc(this.props.postId).collection("comments").orderBy("timestamp", "desc")
     .get().then((querySnapshot) => {
 
@@ -38,7 +37,7 @@ class PostDisplay extends React.Component {
 
     if (this.state !== prevState) {
 
-      db.collection("publicTrees").doc(this.props.treeId).collection("posts")
+      firebase.firestore().collection("publicTrees").doc(this.props.treeId).collection("posts")
       .doc(this.props.postId).collection("comments").orderBy("timestamp", "desc")
       .get().then((querySnapshot) => {
 

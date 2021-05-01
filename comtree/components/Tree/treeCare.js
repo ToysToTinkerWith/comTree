@@ -1,5 +1,6 @@
 import React from 'react';
-import { db } from "../firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
 
 import { Formik, Form } from 'formik';
 import { Button, Typography, TextField, Grid, makeStyles } from '@material-ui/core'
@@ -36,7 +37,7 @@ function TreeCare(props) {
 
     console.log(formData)
 
-            db.collection("publicTrees").doc(props.treeId).update({
+            firebase.firestore().collection("publicTrees").doc(props.treeId).update({
               watered: formData.watered,
               fert: formData.fert,
               wiki: formData.wiki

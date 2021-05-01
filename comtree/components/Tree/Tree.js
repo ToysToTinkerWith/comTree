@@ -1,6 +1,6 @@
 import React from "react"
-import { db } from "../firebase"
-import firebase from "firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
 
 import PostDisplay from "./postDisplay"
 import Post from "./post"
@@ -9,10 +9,9 @@ import TreeCare from "./treeCare"
 
 import { Button, Typography, Avatar, IconButton } from "@material-ui/core"
 
-
 let isMounted = false
 
-class PublicTree extends React.Component {
+class Tree extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -30,16 +29,16 @@ class PublicTree extends React.Component {
 
   componentDidMount() {
     isMounted = true
-    db.collection("publicTrees").onSnapshot(snapshot => {
+    firebase.firestore().collection("publicTrees").onSnapshot(snapshot => {
       let thisTree = null
       let thisId = null
 
       snapshot.docs.forEach(doc => {
-        if(doc.data().psudeoId === this.props.psudeoId) {
+        if(doc.data().psudeoId === this.props.tree.psudeoId) {
           thisTree = doc.data()
           thisId = doc.id
 
-          db.collection("publicTrees").doc(thisId).collection("posts")
+          firebase.firestore().collection("publicTrees").doc(thisId).collection("posts")
           .orderBy("timestamp", "desc")
           .get().then((querySnapshot) => {
 
@@ -79,14 +78,14 @@ class PublicTree extends React.Component {
   hugTree(uid) {
 
     if (uid) {
-      db.collection("publicTrees").doc(this.state.treeId).update({
-        huggedBy: firebase.firestore.FieldValue.arrayUnion(this.props.uid)
+      firebase.firestore().collection("publicTrees").doc(this.state.treeId).update({
+        huggedBy: firebase.firestore.FieldValue.arrayUnion(this.props.user.uid)
       })
     }
 
     else {
-      db.collection("publicTrees").doc(this.state.treeId).update({
-        huggedBy: firebase.firestore.FieldValue.arrayRemove(this.props.uid)
+      firebase.firestore().collection("publicTrees").doc(this.state.treeId).update({
+        huggedBy: firebase.firestore.FieldValue.arrayRemove(this.props.user.uid)
       })
     }
 
@@ -118,12 +117,12 @@ class PublicTree extends React.Component {
                 <Typography variant="h4" align="center" color="secondary"> {this.state.tree.name} </Typography>
                 <br />
                 
-                {this.state.tree.huggedBy.includes(this.props.uid) ? 
+                {this.state.tree.huggedBy.includes(this.props.user.uid) ? 
                 <Button color="secondary" variant="outlined" onClick={() => {
                   this.hugTree(null)
                 }} > Release </Button> :
                 <Button color="secondary" variant="outlined" onClick={() => {
-                  this.hugTree(this.props.uid)
+                  this.hugTree(this.props.user.uid)
                 }} > Hug </Button>
                 }
 
@@ -141,11 +140,11 @@ class PublicTree extends React.Component {
                 <br />
 
                 {this.state.status === "post" ?
-                <Post treeId={this.props.psudeoId} username={this.props.username} uid={this.props.uid} /> : 
+                <Post treeId={this.props.psudeoId} user={this.props.user} /> : 
                 null}
 
                 {this.state.status === "tree" ?
-                <TreeCare treeId={this.state.treeId} tree={this.state.tree} username={this.props.username} uid={this.props.uid} /> : 
+                <TreeCare treeId={this.state.treeId} tree={this.state.tree} /> : 
                 null}
 
                 {this.state.posts.length > 0 ? this.state.posts.map((post, index) => {
@@ -167,7 +166,7 @@ class PublicTree extends React.Component {
 
                 {this.state.post ? 
                 [<PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} />,
-                <Comment uid={this.props.uid} username={this.props.username} treeId={this.state.treeId} postId={this.state.postId} />]
+                <Comment user={this.props.user} treeId={this.state.treeId} postId={this.state.postId} />]
  :
                 null}
               </div>
@@ -186,4 +185,4 @@ class PublicTree extends React.Component {
   }
 }
 
-export default PublicTree
+export default Tree

@@ -44,7 +44,7 @@ function SignUp(props) {
   })
   .catch((error) => alert(error.message))
 
-  props.setPage("home")
+  props.setPage("map")
     
 }
 

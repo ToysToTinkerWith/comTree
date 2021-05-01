@@ -6,7 +6,7 @@ function Marker(props) {
 
     let adoptstyle
 
-    if (props.tree.huggedBy.includes(props.uid)) {
+    if (props.tree.huggedBy.includes(props.user.uid)) {
       adoptstyle = {
         border: "2px solid blue",
         width: props.width,
@@ -38,8 +38,7 @@ function Marker(props) {
 
       return (
         <div>
-          <IconButton onClick={() => [props.setViewTree(props.tree),
-          props.setPage("tree")]} >
+          <IconButton onClick={() => [props.setTree(props.tree), props.setPage("tree")]} >
             <Avatar src={props.tree.imageUrl} style={adoptstyle}/>
           </IconButton>
         </div>

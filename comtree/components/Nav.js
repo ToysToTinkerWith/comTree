@@ -1,13 +1,13 @@
 import firebase from "firebase/app"
 import "firebase/auth"
-import { useAuth } from "../firebase/firebaseAuth"
 
-
-import { AppBar, Typography, IconButton, Toolbar, makeStyles } from "@material-ui/core"
+import { AppBar, Typography, IconButton, Button, Toolbar, makeStyles } from "@material-ui/core"
 
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ImageSearchIcon from '@material-ui/icons/ImageSearch';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
 
 import theme from "../theme"
 
@@ -18,26 +18,27 @@ const useStyles = makeStyles((theme) => ({
 
 }))
 
-export default function Nav() {
+export default function Nav(props) {
 
   const classes = useStyles()
 
-  const { user } = useAuth()
-
-  return (
+  if (props.user) {
+    return (
     <div>
       <AppBar position="static">
         <Toolbar>
         <div className={classes.title}>
         <Typography variant="h5" color="secondary"> comTree </Typography>
         </div>
-        <IconButton color="secondary" href="./profile">
+        <IconButton color="secondary" onClick={() => props.setPage("map")}>
+          <ImageSearchIcon />
+        </IconButton>
+        <IconButton color="secondary" onClick={() => props.setPage("profile")}>
           <AccountCircle />
         </IconButton>
-        <IconButton color="secondary" href="./upload">
+        <IconButton color="secondary" onClick={() => props.setPage("upload")}>
           <AddIcon />
         </IconButton>
-        {user ? 
         <IconButton 
         onClick={async () => {
                 await firebase.auth().signOut();
@@ -46,13 +47,35 @@ export default function Nav() {
               color="secondary">
           <ExitToAppIcon />
         </IconButton>
-        :
-        null
-        }
         
         </Toolbar>
       </AppBar>
     </div>
   )
+  }
+
+  else {
+    return (
+      <div>
+      <AppBar position="static">
+        <Toolbar>
+        <div className={classes.title}>
+        <Typography variant="h5" color="secondary"> comTree </Typography>
+        </div>
+        <IconButton color="secondary" onClick={() => props.setPage("map")}>
+          <ImageSearchIcon />
+        </IconButton>
+        <IconButton color="secondary" onClick={() => props.setPage("auth")}>
+          <AccountBoxIcon />
+        </IconButton>
+
+        </Toolbar>
+      </AppBar>
+    </div>
+    )
+    
+  }
+
+  
   
 }

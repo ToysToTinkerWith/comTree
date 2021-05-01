@@ -1,7 +1,7 @@
-
 import React, { useState } from 'react';
-import { db, storage } from "../firebase"
-import firebase from "firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
+import "firebase/storage"
 
 import { Formik, Form } from 'formik';
 import { Button, Typography, TextField, Input, CircularProgress, Grid, makeStyles } from '@material-ui/core'
@@ -38,7 +38,7 @@ function Comment(props) {
 
     if (formData.image) {
 
-      const uploadTask = storage.ref("images/" + formData.image.name + "-" + props.uid).put(formData.image)
+      const uploadTask = firebase.storage().ref("images/" + formData.image.name + "-" + props.user.uid).put(formData.image)
 
             uploadTask.on("state_changed", (snapshot) => {
               const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
@@ -48,13 +48,13 @@ function Comment(props) {
               alert(error.message)
             },
             () => {
-              storage.ref("images").child(formData.image.name + "-" + props.uid).getDownloadURL().then(url => {
-                db.collection("publicTrees").doc(props.treeId).collection("posts")
+              firebase.storage().ref("images").child(formData.image.name + "-" + props.user.uid).getDownloadURL().then(url => {
+                firebase.firestore().collection("publicTrees").doc(props.treeId).collection("posts")
                 .doc(props.postId).collection("comments").add({
                   imageUrl: url,
                   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                  postedBy: props.username,
-                  postedById: props.uid,
+                  postedBy: props.user.displayName,
+                  postedById: props.user.uid,
                   comment: formData.comment,
                   psudeoId: Math.random().toString(36)
 
@@ -66,12 +66,12 @@ function Comment(props) {
 
     else {
 
-      db.collection("publicTrees").doc(props.treeId).collection("posts")
+      firebase.firestore().collection("publicTrees").doc(props.treeId).collection("posts")
       .doc(props.postId).collection("comments").add({
         imageUrl: null,
         timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-        postedBy: props.username,
-        postedById: props.uid,
+        postedBy: props.user.displayName,
+        postedById: props.user.uid,
         comment: formData.comment,
         psudeoId: Math.random().toString(36),
 
@@ -141,7 +141,7 @@ function Comment(props) {
             onChange={(event) => {
               setFieldValue("image", event.target.files[0])
             }} />
-            <CircularProgress variant="static" value={progress} />
+            <CircularProgress variant="determinate" value={progress} />
           </Grid>
         </Grid>
         
