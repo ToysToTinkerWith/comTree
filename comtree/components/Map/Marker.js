@@ -6,34 +6,41 @@ function Marker(props) {
 
     let adoptstyle
 
-    if (props.tree.huggedBy.includes(props.user.uid)) {
-      adoptstyle = {
-        border: "2px solid blue",
-        width: props.width,
-        height: props.width
+    if (props.user) {
+
+      if (props.tree.huggedBy.includes(props.user.uid)) {
+        adoptstyle = {
+          border: "2px solid blue",
+          width: props.width,
+          height: props.width
+        }
       }
 
-    }
+      else if (props.tree.huggedBy.length > 0) {
+        adoptstyle = {
+          border: "2px solid green",
+          width: props.width,
+          height: props.width
+        }
+      }
 
-    else if (props.tree.huggedBy.length > 0) {
-      adoptstyle = {
-        border: "2px solid green",
-        width: props.width,
-        height: props.width
-        
+      else {
+        adoptstyle = {
+          border: "2px solid red",
+          width: props.width,
+          height: props.width
 
+        }
       }
 
     }
 
     else {
       adoptstyle = {
-        border: "2px solid red",
-        width: props.width,
-        height: props.width
-
-      }
-
+          border: "2px solid green",
+          width: props.width,
+          height: props.width
+        }
     }
 
       return (

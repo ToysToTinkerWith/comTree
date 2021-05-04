@@ -8,6 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import theme from "../theme"
 
@@ -33,16 +34,18 @@ export default function Nav(props) {
         <IconButton color="secondary" onClick={() => props.setPage("map")}>
           <ImageSearchIcon />
         </IconButton>
+        <IconButton color="secondary" onClick={() => props.setPage("upload")}>
+          <AddIcon />
+        </IconButton>
         <IconButton color="secondary" onClick={() => props.setPage("profile")}>
           <AccountCircle />
         </IconButton>
-        <IconButton color="secondary" onClick={() => props.setPage("upload")}>
-          <AddIcon />
+        <IconButton color="secondary" onClick={() => props.setPage("store")}>
+          <StorefrontIcon />
         </IconButton>
         <IconButton 
         onClick={async () => {
                 await firebase.auth().signOut();
-                window.location.href = "/";
               }}
               color="secondary">
           <ExitToAppIcon />

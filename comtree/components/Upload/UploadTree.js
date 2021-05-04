@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { db, storage } from "../firebase"
-import firebase from "firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
+import "firebase/storage"
 
 import GoogleMapReact from 'google-map-react';
-import UploadMarker from "./uploadMarker"
-import treeImg from "../images/tree.png"
-import curLoc from "../images/curLoc.png"
+import UploadMarker from "./UploadMarker"
 
-
+import NatureIcon from '@material-ui/icons/Nature';
+import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 
 import { Formik, Form } from 'formik';
 import { Button, Typography, TextField, Input, CircularProgress, Box, Avatar, makeStyles } from '@material-ui/core'
 
-const Marker = () => <div><img src={treeImg} alt="" height="50" width="50" /></div>;
+const Marker = () => <div><Image src="/../../public/comTreeSym.png" alt="tree" width={100} height={100} /></div>
 
 const useStyles = makeStyles((theme) => ({
   confirm: {
@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
  
-function UploadTreeForm(props) {
+function UploadTree(props) {
 
   const [progress, setProgress] = useState(0)
   const [displayTrees, setDisplayTrees] = useState([])
@@ -47,7 +47,7 @@ function UploadTreeForm(props) {
 
     let imgId = Math.random().toString(20)
 
-    const uploadTask = storage.ref("images/" + imgId + "-" + props.uid).put(formData.image)
+    const uploadTask = firebase.storage().ref("images/" + imgId + "-" + props.user.uid).put(formData.image)
 
       uploadTask.on("state_changed", (snapshot) => {
         const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
@@ -60,27 +60,27 @@ function UploadTreeForm(props) {
 
         let generatedId = Math.random().toString(36)
 
-        storage.ref("images").child(imgId + "-" + props.uid).getDownloadURL().then(url => {
-          db.collection("publicTrees").add({
+        firebase.storage().ref("images").child(imgId + "-" + props.user.uid).getDownloadURL().then(url => {
+          firebase.firestore().collection("publicTrees").add({
             psudeoId: generatedId,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             latitude: formData.lat,
             longitude: formData.lng,
             name: formData.name,
-            huggedBy: [props.uid],
+            huggedBy: [props.user.uid],
             imageUrl: url,
             watered: null,
             fert: null,
             wiki: null,
           }).then(
-            db.collection("publicTrees").where("psudeoId", "==", generatedId).get()
+            firebase.firestore().collection("publicTrees").where("psudeoId", "==", generatedId).get()
             .then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
               console.log(doc.id, " => ", doc.data())
 
-                db.collection("publicTrees").doc(doc.id).collection("posts").add({
-                  postedBy: props.username,
-                  postedbyId: props.uid,
+                firebase.firestore().collection("publicTrees").doc(doc.id).collection("posts").add({
+                  postedBy: props.user.displayName,
+                  postedbyId: props.user.uid,
                   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                   imageUrl: url,
                   description: formData.description
@@ -96,7 +96,7 @@ function UploadTreeForm(props) {
 
   useEffect(() => {
 
-  const unsubscribe = db.collection("publicTrees").onSnapshot(snapshot => {
+  const unsubscribe = firebase.firestore().collection("publicTrees").onSnapshot(snapshot => {
         setDisplayTrees(snapshot.docs.map(doc => doc.data()))
 
         navigator.geolocation.getCurrentPosition((position) => {
@@ -190,7 +190,7 @@ function UploadTreeForm(props) {
 
       <Box margin={5}>
           <TextField
-          label="Name"
+          label="Tree Name"
           name="name"
           className={classes.name}
           onChange={handleChange}
@@ -229,17 +229,12 @@ function UploadTreeForm(props) {
       }) :  null }
 
       {found ? 
-        <Avatar src={curLoc} alt="" lat={lat} lng={lng} style={{ width: 20, height: 20 }} /> :
+        <PersonPinCircleIcon lat={lat} lng={lng} style={{ width: 25, height: 25 }} /> 
+        :
         null
       }
 
-
-      
-
-       <Marker
-            lat={values.lat}
-            lng={values.lng}
-          />
+       <NatureIcon lat={values.lat} lng={values.lng} style={{ width: 25, height: 25 }} />
 
         
           
@@ -288,4 +283,4 @@ function UploadTreeForm(props) {
 
 
 
-export default UploadTreeForm
+export default UploadTree

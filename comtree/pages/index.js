@@ -5,7 +5,10 @@ import { useAuth } from "../firebase/firebaseAuth"
 import Nav from "../components/Nav"
 import Map from "../components/Map/Map"
 import Auth from "../components/Auth/Auth"
+import UploadTree from "../components/Upload/UploadTree"
+import Profile from "../components/Profile/Profile"
 import Tree from "../components/Tree/Tree"
+
 
 export default function Root() {
 
@@ -32,6 +35,18 @@ export default function Root() {
 
     {page === "auth" ?
     <Auth setPage={setPage}/>
+    :
+    null
+    }
+
+    {page === "upload" ?
+    <UploadTree user={user}/>
+    :
+    null
+    }
+
+    {page === "profile" ?
+    <Profile user={user} setPage={setPage} setTree={setTree}/>
     :
     null
     }

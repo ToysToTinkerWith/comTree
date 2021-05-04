@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { db, storage } from "../firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
+import "firebase/storage"
 
 import { Formik, Form } from 'formik';
 import { Button, TextField, Input, CircularProgress, makeStyles } from '@material-ui/core'
@@ -20,7 +22,7 @@ function EditProfile(props) {
   const handleUpload = (formData) => {
 
     if (formData.image) {
-      const uploadTask = storage.ref("images/" + formData.image.name + "-" + props.uid).put(formData.image)
+      const uploadTask = firebase.storage().ref("images/" + formData.image.name + "-" + props.user.uid).put(formData.image)
 
       uploadTask.on("state_changed", (snapshot) => {
         const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
@@ -30,12 +32,12 @@ function EditProfile(props) {
         alert(error.message)
       },
       () => {
-        storage.ref("images").child(formData.image.name + "-" + props.uid).getDownloadURL().then(url => {
-          db.collection("profiles").where("uid", "==", props.uid)
+        firebase.storage().ref("images").child(formData.image.name + "-" + props.user.uid).getDownloadURL().then(url => {
+          firebase.firestore().collection("profiles").where("uid", "==", props.user.uid)
           .get()
           .then((querySnapshot) => {
               querySnapshot.forEach((doc) => {
-                  db.collection("profiles").doc(doc.id).update({
+                  firebase.firestore().collection("profiles").doc(doc.id).update({
                     imageUrl: url,
                     bio: formData.bio
                   })
@@ -51,12 +53,12 @@ function EditProfile(props) {
         )
     }
     else {
-      db.collection("profiles").where("uid", "==", props.uid)
+      firebase.firestore().collection("profiles").where("uid", "==", props.user.uid)
           .get()
           .then((querySnapshot) => {
               querySnapshot.forEach((doc) => {
                   console.log(doc.id, " => ", doc.data())
-                  db.collection("profiles").doc(doc.id).update({
+                  firebase.firestore().collection("profiles").doc(doc.id).update({
                     bio: formData.bio
                   })
               })

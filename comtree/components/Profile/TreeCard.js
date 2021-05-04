@@ -1,5 +1,6 @@
 import React from "react"
-import { db } from "../firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
 
 import { Typography, Avatar, IconButton } from "@material-ui/core"
 
@@ -16,7 +17,7 @@ class PublicTreeCard extends React.Component {
 
   componentDidMount() {
     isMounted = true
-    db.collection("publicTrees").onSnapshot(snapshot => {
+    firebase.firestore().collection("publicTrees").onSnapshot(snapshot => {
       let thisTree = null
 
       snapshot.docs.forEach(doc => {
@@ -47,9 +48,7 @@ class PublicTreeCard extends React.Component {
       width: "225px",
       backgroundColor: "#FFFFF0",
       borderRadius: "15px",
-      boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-      paddingLeft: "10px",
-      paddingRight: "10px"
+      boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
       }
 
         if(this.state.tree) {
@@ -60,7 +59,7 @@ class PublicTreeCard extends React.Component {
                 <Typography variant="h5" align="center" color="secondary"> {this.state.tree.name} </Typography>
 
                 <IconButton onClick={() => 
-                    {this.props.setViewTree(this.state.tree)
+                    {this.props.setTree(this.state.tree)
                     this.props.setPage("tree")}
                   } >
                   <Avatar src={this.state.tree.imageUrl}  alt=""  style={{ 
@@ -72,9 +71,6 @@ class PublicTreeCard extends React.Component {
                 <br />
                 <br />                
 
-                {this.state.post ? 
-                <Typography variant="h5" color="secondary"> {this.state.post.description} </Typography> :
-                null}
               </div>
           
         )

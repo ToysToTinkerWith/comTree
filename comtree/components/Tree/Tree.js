@@ -109,10 +109,9 @@ class Tree extends React.Component {
 
         if(this.state.tree) {
 
+          if (this.props.user) {
             return (
               <div style={treestyle}>
-
-              
 
                 <Typography variant="h4" align="center" color="secondary"> {this.state.tree.name} </Typography>
                 <br />
@@ -172,6 +171,42 @@ class Tree extends React.Component {
               </div>
           
         )
+          }
+
+          else {
+            return (
+              <div style={treestyle}>
+
+                <Typography variant="h4" align="center" color="secondary"> {this.state.tree.name} </Typography>
+                <br />
+
+                {this.state.posts.length > 0 ? this.state.posts.map((post, index) => {
+                  return [<IconButton onClick={() => this.state.post ?
+                  this.state.post.psudeoId === post.psudeoId ?
+                    this.setState({post: null, postId: null}) : 
+                    this.setState({post: post, postId: this.state.postIds[index]}) :
+                    this.setState({post: post, postId: this.state.postIds[index]})
+                  } >
+          <Avatar src={post.imageUrl} alt="" style={{ height: '200px', width: '200px', float:"left" }} />
+          </IconButton>]
+                }) :
+                null
+                }
+
+                <br />
+                <br /> 
+               
+
+                {this.state.post ? 
+                <PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} />
+                :
+                null}
+              </div>
+          
+        )
+          }
+
+            
         }
 
         else{

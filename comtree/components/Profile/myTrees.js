@@ -1,6 +1,8 @@
 import React from "react"
-import PublicTreeCard from "./publicTreeCard"
-import { db } from "../firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
+
+import TreeCard from "./TreeCard"
 
 class MyTrees extends React.Component {
   constructor() {
@@ -11,7 +13,7 @@ class MyTrees extends React.Component {
   }
 
   componentDidMount() {
-    db.collection("publicTrees").where("huggedBy", "array-contains", this.props.uid)
+    firebase.firestore().collection("publicTrees").where("huggedBy", "array-contains", this.props.user.uid)
     .get()
     .then((querySnapshot) => {
         let myTrees = []
@@ -38,7 +40,7 @@ class MyTrees extends React.Component {
         {myTrees.length > 0 ? myTrees.map(tree => {
           return (
             <div style={{display: "inline-block", paddingRight: 10, paddingBottom: 10 }} key={tree.psudeoId}>
-            <PublicTreeCard uid={this.props.uid} username={this.props.username} psudeoId={tree.psudeoId} setPage={this.props.setPage} setViewTree={this.props.setViewTree} />          
+            <TreeCard user={this.props.user} psudeoId={tree.psudeoId} setPage={this.props.setPage} setTree={this.props.setTree} />          
 
           </div>
           )

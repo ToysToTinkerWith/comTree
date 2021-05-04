@@ -8,6 +8,8 @@ import Marker from "./Marker"
 
 import { Avatar } from "@material-ui/core"
 
+import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
+
 class Map extends React.Component {
 
    constructor() {
@@ -36,7 +38,7 @@ class Map extends React.Component {
           publicTrees: snapshot.docs.map(doc => doc.data()),
           lat: position.coords.latitude,
           lng: position.coords.longitude,
-          zoom: 10,
+          zoom: 12,
           currentLoc: {
             found: true,
             lat: position.coords.latitude,
@@ -65,7 +67,7 @@ class Map extends React.Component {
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyBiB3iNngJM_kFWKxSv9a30O3fww7YTiWA"}}
             center={{lat: this.state.currentLoc.lat, lng: this.state.currentLoc.lng}}
-            zoom={this.state.zoom}
+            zoom={this.state.zoom}            
             onChange={({ zoom }) => {
               this.setState({
                 zoom: zoom
@@ -81,7 +83,8 @@ class Map extends React.Component {
         }) :  null }
 
         {this.state.currentLoc.found ?
-          <h1> h1 </h1> :
+          <PersonPinCircleIcon lat={this.state.currentLoc.lat} lng={this.state.currentLoc.lng} style={{ width: width/2, height: width/2 }}/>
+          :
           null
           }
 

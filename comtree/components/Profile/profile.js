@@ -1,12 +1,12 @@
 import React from "react"
-import EditProfile from "./editProfile"
-import MyTrees from "./myTrees"
-import { db } from "../firebase"
+import firebase from "firebase/app"
+import "firebase/firestore"
+
+import EditProfile from "./EditProfile"
+import MyTrees from "./MyTrees"
 
 import { Typography, Avatar, IconButton } from "@material-ui/core"
-import profilePic from "../images/profilePic.png"
-
-let isMounted = false
+import PersonIcon from '@material-ui/icons/Person'
 
 class Profile extends React.Component {
   constructor() {
@@ -34,27 +34,21 @@ class Profile extends React.Component {
 
   componentDidMount() {
 
-    isMounted = true
-    db.collection("profiles").where("uid", "==", this.props.uid)
+    firebase.firestore().collection("profiles").where("uid", "==", this.props.user.uid)
     .onSnapshot(querySnapshot => {
         querySnapshot.forEach(doc => {
-            if (isMounted) {
+
               this.setState({
               profile: doc.data(),
               editing: false
               })
-            }
+            
             
         })
     });
 
   }
 
-  componentWillUnmount(){
-    isMounted = false
-  }
-
-  
 
   render() {
 
@@ -64,9 +58,7 @@ class Profile extends React.Component {
         boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
         paddingLeft: "10px",
         paddingRight: "10px",
-        paddingTop: "10px",
-        marginLeft: "10px",
-        marginRight: "10px"
+        paddingTop: "10px"
       }
 
     if (this.state.profile) {
@@ -74,23 +66,32 @@ class Profile extends React.Component {
       return (
       <div style={profilestyle}>
         <div style={{ textAlign: "center" }}>
+
           {this.state.profile.imageUrl ? 
             <IconButton onClick={() => this.setState({
               editing: !this.state.editing
             })} >
             <Avatar src={this.state.profile.imageUrl} alt="" style={{ height: "60px", width: "60px", display: "inline-block" }} />
-            </IconButton> :
-            <Avatar src={profilePic} alt="" style={{ height: '60px', width: '60px', display: "inline-block", marginRight: "10px" }} />
+            </IconButton> 
+            :
+            <IconButton onClick={() => this.setState({
+              editing: !this.state.editing
+            })} >
+            <PersonIcon style={{ height: "60px", width: "60px", display: "inline-block" }} />
+            </IconButton>
           }
-          <Typography variant="h4" style={{ display: "inline-block", paddingTop: "10px" }} color="secondary"> {this.props.username} </Typography>
+
+          <Typography variant="h4" style={{ display: "inline-block", paddingTop: "10px" }} color="secondary"> {this.props.user.displayName} </Typography>
         </div>
           <Typography variant="subtitle1" align="center" color="secondary"> {this.state.profile.bio} </Typography>
+
         {this.state.editing ? 
-          <EditProfile bio={this.state.profile.bio} setEdit={this.setEdit} uid={this.props.uid}/> :
+          <EditProfile bio={this.state.profile.bio} setEdit={this.setEdit} user={this.props.user}/> :
           null }
+          
         <br />
         <hr/>
-        <MyTrees uid={this.props.uid} username={this.props.username} setPage={this.props.setPage} setViewTree={this.props.setViewTree} />
+        <MyTrees user={this.props.user} setPage={this.props.setPage} setTree={this.props.setTree} />
       </div>
       )
       
