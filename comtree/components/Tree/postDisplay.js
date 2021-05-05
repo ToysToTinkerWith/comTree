@@ -63,7 +63,8 @@ class PostDisplay extends React.Component {
       borderRadius: "15px",
       boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
       paddingLeft: "10px",
-      paddingRight: "10px"
+      paddingRight: "10px",
+      marginBottom: "10px"
    }
 
 
@@ -93,22 +94,6 @@ class PostDisplay extends React.Component {
               commentTime = comment.timestamp.toDate().toLocaleTimeString()
             } 
 
-            if (comment.imageUrl) {
-              return (
-                <div key={comment.psudeoId}>
-
-                  {comments[0].psudeoId === comment.psudeoId ? null : <hr/>}
-                  
-                  <Typography variant="h6" color="secondary"> <b>{comment.postedBy}:</b> {comment.comment} </Typography>
-                  <img src={comment.imageUrl} alt="" style={{ borderRadius: "15px" }} width="50%" />
-                  <Typography align="right" variant="h6" color="secondary"> {commentDate + " @ " + commentTime} </Typography>
-                  
-                </div>
-            )
-
-            }
-
-            else {
               return (
                 <div key={comment.psudeoId}>
 
@@ -118,13 +103,14 @@ class PostDisplay extends React.Component {
                 <Typography align="right" variant="h6" color="secondary"> {commentDate + " @ " + commentTime} </Typography>
                 </div>
               )
-            }
             
-          }) :
-          <Typography variant="h5" color="secondary" align="center"> No comments </Typography> }
+            
+          }) 
+          :
+          null 
+          }
         </div>
-        <br />
-        <br />
+
       </div>
     )
    }

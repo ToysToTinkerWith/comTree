@@ -1,7 +1,10 @@
+import React from 'react';
 import firebase from "firebase/app"
-import "firebase/auth"
 
-import { AppBar, Typography, IconButton, Button, Toolbar, makeStyles } from "@material-ui/core"
+import { makeStyles } from '@material-ui/core/styles';
+import SpeedDial from '@material-ui/lab/SpeedDial';
+import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
+import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import AddIcon from '@material-ui/icons/Add';
@@ -10,75 +13,122 @@ import ImageSearchIcon from '@material-ui/icons/ImageSearch';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
-import theme from "../theme"
+import Image from "next/image"
+
 
 const useStyles = makeStyles((theme) => ({
   title: {
-    flexGrow: 1,
-  }
+    zIndex: 2,
+    position: "absolute",
+    top: theme.spacing(1),
+    left: theme.spacing(1),
+  },
+  speedDial: {
+    zIndex: 1,
+    position: 'absolute',
+    top: theme.spacing(1),
+    right: theme.spacing(1),
+  },
+}));
 
-}))
+export default function SpeedDials(props) {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
-export default function Nav(props) {
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  const classes = useStyles()
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   if (props.user) {
     return (
-    <div>
-      <AppBar position="static">
-        <Toolbar>
-        <div className={classes.title}>
-        <Typography variant="h5" color="secondary"> comTree </Typography>
+      <div>
+        <div>
+          <div className={classes.title}>
+          <Image src="/comtree.png" alt="comTree" width={135} height={45}  />
+          </div>
+          <SpeedDial
+            ariaLabel="Nav"
+            className={classes.speedDial}
+            icon={<SpeedDialIcon />}
+            onClose={handleClose}
+            onOpen={handleOpen}
+            open={open}
+            direction={"left"}
+          >
+            <SpeedDialAction
+                icon={<ExitToAppIcon />}
+                tooltipTitle={"Logout"}
+                onClick={async () => {
+                    props.setPage("Map")
+                    await firebase.auth().signOut();
+                  }}
+              />
+            <SpeedDialAction
+              icon={<StorefrontIcon />}
+              tooltipTitle={"Store"}
+              href="/store"
+            />    
+            <SpeedDialAction
+              icon={<AccountCircle />}
+              tooltipTitle={"Profile"}
+              onClick={() => props.setPage("Profile")}
+            />
+            <SpeedDialAction
+              icon={<AddIcon />}
+              tooltipTitle={"Upload"}
+              onClick={() => props.setPage("Upload")}
+            />  
+            <SpeedDialAction
+              icon={<ImageSearchIcon />}
+              tooltipTitle={"Map"}
+              onClick={() => props.setPage("Map")}
+            />
+          </SpeedDial>
         </div>
-        <IconButton color="secondary" onClick={() => props.setPage("map")}>
-          <ImageSearchIcon />
-        </IconButton>
-        <IconButton color="secondary" onClick={() => props.setPage("upload")}>
-          <AddIcon />
-        </IconButton>
-        <IconButton color="secondary" onClick={() => props.setPage("profile")}>
-          <AccountCircle />
-        </IconButton>
-        <IconButton color="secondary" onClick={() => props.setPage("store")}>
-          <StorefrontIcon />
-        </IconButton>
-        <IconButton 
-        onClick={async () => {
-                await firebase.auth().signOut();
-              }}
-              color="secondary">
-          <ExitToAppIcon />
-        </IconButton>
-        
-        </Toolbar>
-      </AppBar>
-    </div>
-  )
+      </div>
+    )
   }
-
   else {
     return (
       <div>
-      <AppBar position="static">
-        <Toolbar>
-        <div className={classes.title}>
-        <Typography variant="h5" color="secondary"> comTree </Typography>
+        <div>
+          <div className={classes.title}>
+          <Image src="/comtree.png" alt="comTree" width={135} height={45}  />
+          </div>
+          <SpeedDial
+            ariaLabel="Nav"
+            className={classes.speedDial}
+            icon={<SpeedDialIcon />}
+            onClose={handleClose}
+            onOpen={handleOpen}
+            open={open}
+            direction={"left"}
+          >
+            
+            <SpeedDialAction
+              icon={<AccountBoxIcon />}
+              tooltipTitle={"Login"}
+              onClick={() => props.setPage("Auth")}
+            />
+            <SpeedDialAction
+              icon={<StorefrontIcon />}
+              tooltipTitle={"Store"}
+              href="/store"
+            />
+            <SpeedDialAction
+              icon={<ImageSearchIcon />}
+              tooltipTitle={"Map"}
+              onClick={() => props.setPage("Map")}
+            />
+          </SpeedDial>
         </div>
-        <IconButton color="secondary" onClick={() => props.setPage("map")}>
-          <ImageSearchIcon />
-        </IconButton>
-        <IconButton color="secondary" onClick={() => props.setPage("auth")}>
-          <AccountBoxIcon />
-        </IconButton>
-
-        </Toolbar>
-      </AppBar>
-    </div>
+      </div>
     )
-    
   }
 
-  
   
 }

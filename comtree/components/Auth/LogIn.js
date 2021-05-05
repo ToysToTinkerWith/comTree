@@ -25,7 +25,7 @@ function LogIn(props) {
   const logIn = (formData) => {
 
     firebase.auth().signInWithEmailAndPassword(formData.email, formData.password)
-    .then(props.setPage("map"))
+    .then(props.setPage("Map"))
     .catch((error) => alert(error.message))
     
 }

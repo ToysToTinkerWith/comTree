@@ -60,7 +60,7 @@ class PublicTreeCard extends React.Component {
 
                 <IconButton onClick={() => 
                     {this.props.setTree(this.state.tree)
-                    this.props.setPage("tree")}
+                    this.props.setPage("Tree")}
                   } >
                   <Avatar src={this.state.tree.imageUrl}  alt=""  style={{ 
                     height: '200px', 

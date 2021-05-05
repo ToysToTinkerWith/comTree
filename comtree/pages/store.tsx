@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-
 import { GetServerSideProps } from "next";
 import { loadStripe } from "@stripe/stripe-js";
 import Stripe from "stripe";
@@ -41,6 +40,31 @@ export default function Store({ prices }: IProps) {
     
   }
 
+  const removeFromCart = (priceId: string) => {
+
+    let exists = false
+    let existsIndex = 0
+
+    cart.forEach((item, index) => {
+      if (item.price === priceId) {
+        exists = true
+        existsIndex = index
+      }
+    })
+
+    if (exists) {
+      let newCart = [...cart]
+      if (newCart[existsIndex].quantity === 1){
+        newCart.splice(existsIndex, 1)
+      }
+      else {
+        newCart[existsIndex].quantity = newCart[existsIndex].quantity - 1
+      }
+      setCart(newCart)
+    }
+    
+  }
+
   const checkout = async (cart) => {
     const session = await createCheckoutSession({
       success_url: window.location.href,
@@ -72,6 +96,7 @@ export default function Store({ prices }: IProps) {
             <img src={price.product.images[0]} style={{ width:50, height:50}} />
             <p>Cost: ${((price.unit_amount as number) / 100).toFixed(2)}</p>
             <button onClick={() => addToCart(price.id)}>Add</button>
+            <button onClick={() => removeFromCart(price.id)}>Remove</button>
           </li>
         ))}
       </ul>

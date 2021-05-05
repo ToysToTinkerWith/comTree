@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import firebase from "firebase/app"
 import "firebase/firestore"
-import "firebase/storage"
 
 import { Formik, Form } from 'formik';
 import { Button, Typography, TextField, Input, CircularProgress, Grid, makeStyles } from '@material-ui/core'
@@ -36,36 +35,6 @@ function Comment(props) {
 
   const handleUpload = (formData) => {
 
-    if (formData.image) {
-
-      const uploadTask = firebase.storage().ref("images/" + formData.image.name + "-" + props.user.uid).put(formData.image)
-
-            uploadTask.on("state_changed", (snapshot) => {
-              const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
-              setProgress(progress)
-            },
-            (error) => {
-              alert(error.message)
-            },
-            () => {
-              firebase.storage().ref("images").child(formData.image.name + "-" + props.user.uid).getDownloadURL().then(url => {
-                firebase.firestore().collection("publicTrees").doc(props.treeId).collection("posts")
-                .doc(props.postId).collection("comments").add({
-                  imageUrl: url,
-                  timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                  postedBy: props.user.displayName,
-                  postedById: props.user.uid,
-                  comment: formData.comment,
-                  psudeoId: Math.random().toString(36)
-
-                })
-              })
-            })
-
-    }
-
-    else {
-
       firebase.firestore().collection("publicTrees").doc(props.treeId).collection("posts")
       .doc(props.postId).collection("comments").add({
         imageUrl: null,
@@ -77,10 +46,6 @@ function Comment(props) {
 
       })
 
-    }
-
-    
-
   }
 
 
@@ -89,14 +54,13 @@ function Comment(props) {
     <div>
     <Formik
       initialValues = {{ 
-        comment: "",
-        image: null
+        comment: ""
     }}
 
     validate = {values => {
       const errors = {}
 
-      if (!values.image && !values.comment) {
+      if (!values.comment) {
           errors.image = "Upload an image or a comment"
         }
       
@@ -124,8 +88,6 @@ function Comment(props) {
         /* and other goodies */
       }) => (
       <Form onSubmit={handleSubmit} autoComplete="off" className={classes.root} >
-      <Grid container spacing={4}>
-          <Grid item xs={12} sm={7}>
             <TextField
             label="Comment"
             name="comment"
@@ -135,20 +97,7 @@ function Comment(props) {
             variant="outlined"
             onChange={handleChange}
             />
-          </Grid>
-          <Grid item xs={12} sm={5}>
-            <Input className={classes.image} id="image" name="image" type="file"
-            onChange={(event) => {
-              setFieldValue("image", event.target.files[0])
-            }} />
-            <CircularProgress variant="determinate" value={progress} />
-          </Grid>
-        </Grid>
-        
-          <div>
-            <br/>
            
-          </div>
 
       <Typography className={classes.error}> {errors.image} </Typography>
 

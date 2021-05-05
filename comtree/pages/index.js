@@ -14,10 +14,8 @@ export default function Root() {
 
   const { user } = useAuth()
 
-  const [page, setPage] = useState("map")
+  const [page, setPage] = useState("Map")
   const [tree, setTree] = useState(null)
-
-  console.log(user)
 
   return (
     <main>
@@ -25,33 +23,35 @@ export default function Root() {
       <title>comTree</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
     </Head>
+
+    
     <Nav user={user} setPage={setPage} />
 
-    {page === "map" ?
+    {page === "Map" ?
     <Map user={user} setPage={setPage} setTree={setTree} />
     :
     null
     }
 
-    {page === "auth" ?
+    {page === "Auth" ?
     <Auth setPage={setPage}/>
     :
     null
     }
 
-    {page === "upload" ?
+    {page === "Upload" ?
     <UploadTree user={user}/>
     :
     null
     }
 
-    {page === "profile" ?
+    {page === "Profile" ?
     <Profile user={user} setPage={setPage} setTree={setTree}/>
     :
     null
     }
 
-    {page === "tree" ?
+    {page === "Tree" ?
     <Tree user={user} tree={tree} />
     :
     null

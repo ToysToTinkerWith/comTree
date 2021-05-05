@@ -7,7 +7,7 @@ import Post from "./post"
 import Comment from "./comment"
 import TreeCare from "./treeCare"
 
-import { Button, Typography, Avatar, IconButton } from "@material-ui/core"
+import { Button, Modal, Typography, Avatar, IconButton } from "@material-ui/core"
 
 let isMounted = false
 
@@ -139,11 +139,35 @@ class Tree extends React.Component {
                 <br />
 
                 {this.state.status === "post" ?
-                <Post treeId={this.props.psudeoId} user={this.props.user} /> : 
+                <Modal 
+                open={true} 
+                onClose={() => this.setState({status: "none"})}
+                style={{
+                  marginTop: 50,
+                  marginRight: 100,
+                  marginBottom: 50,
+                  marginLeft: 100,
+                  overflow: "scroll"
+                }}>
+                <Post treeId={this.props.psudeoId} user={this.props.user} />
+                </Modal> 
+                : 
                 null}
 
                 {this.state.status === "tree" ?
-                <TreeCare treeId={this.state.treeId} tree={this.state.tree} /> : 
+                <Modal 
+                open={true} 
+                onClose={() => this.setState({status: "none"})}
+                style={{
+                  marginTop: 50,
+                  marginRight: 100,
+                  marginBottom: 50,
+                  marginLeft: 100,
+                  overflow: "scroll"
+                }}>
+                <TreeCare treeId={this.state.treeId} tree={this.state.tree} />
+                </Modal> 
+                : 
                 null}
 
                 {this.state.posts.length > 0 ? this.state.posts.map((post, index) => {
@@ -164,8 +188,21 @@ class Tree extends React.Component {
                
 
                 {this.state.post ? 
-                [<PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} />,
-                <Comment user={this.props.user} treeId={this.state.treeId} postId={this.state.postId} />]
+                <Modal 
+                open={true} 
+                onClose={() => this.setState({post: null, postId: null})}
+                style={{
+                  marginTop: 50,
+                  marginRight: 100,
+                  marginBottom: 50,
+                  marginLeft: 100,
+                  overflow: "scroll"
+                }}>
+                <div style={treestyle}>
+                <PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} />
+                <Comment user={this.props.user} treeId={this.state.treeId} postId={this.state.postId} />
+                </div>
+                </Modal>
  :
                 null}
               </div>
@@ -198,7 +235,18 @@ class Tree extends React.Component {
                
 
                 {this.state.post ? 
+                <Modal 
+                open={true} 
+                onClose={() => this.setState({post: null, postId: null})}
+                style={{
+                  marginTop: 50,
+                  marginRight: 100,
+                  marginBottom: 50,
+                  marginLeft: 100,
+                  overflow: "scroll"
+                }}>
                 <PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} />
+                </Modal>
                 :
                 null}
               </div>

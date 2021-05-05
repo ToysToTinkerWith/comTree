@@ -5,14 +5,13 @@ import "firebase/storage"
 
 import GoogleMapReact from 'google-map-react';
 import UploadMarker from "./UploadMarker"
+import Image from "next/image"
 
 import NatureIcon from '@material-ui/icons/Nature';
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 
 import { Formik, Form } from 'formik';
 import { Button, Typography, TextField, Input, CircularProgress, Box, Avatar, makeStyles } from '@material-ui/core'
-
-const Marker = () => <div><Image src="/../../public/comTreeSym.png" alt="tree" width={100} height={100} /></div>
 
 const useStyles = makeStyles((theme) => ({
   confirm: {
@@ -234,7 +233,7 @@ function UploadTree(props) {
         null
       }
 
-       <NatureIcon lat={values.lat} lng={values.lng} style={{ width: 25, height: 25 }} />
+       <Image src="/comtreesym.png" alt="tree" width={100} height={100} lat={values.lat} lng={values.lng}  />
 
         
           
