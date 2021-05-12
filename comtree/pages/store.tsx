@@ -4,25 +4,40 @@ import { loadStripe } from "@stripe/stripe-js";
 import Stripe from "stripe";
 import { createCheckoutSession } from "next-stripe/client";
 
+import { Typography, Button, Grid, Modal, IconButton, Avatar, makeStyles } from "@material-ui/core"
+import Image from "next/image"
+
+const useStyles = makeStyles((theme) => ({
+  item: {
+    backgroundColor: "#FFFFF0",
+    borderRadius: "15px",
+    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+    textAlign: "center"
+  }
+}))
+
 interface IPrice extends Stripe.Price {
   product: Stripe.Product;
 }
 
 interface IProps {
-  prices: IPrice[];
+  items: IPrice[];
 }
 
-export default function Store({ prices }: IProps) {
+export default function Store({ items }: IProps) {
 
   const [cart, setCart] = useState([])
+  const [itemImg, setItemImg] = useState(null)
 
-  const addToCart = (priceId: string) => {
+  const classes = useStyles()
+
+  const addToCart = (item) => {
 
     let exists = false
     let existsIndex = 0
 
-    cart.forEach((item, index) => {
-      if (item.price === priceId) {
+    cart.forEach((cartItem, index) => {
+      if (cartItem.price === item.id) {
         exists = true
         existsIndex = index
       }
@@ -35,18 +50,18 @@ export default function Store({ prices }: IProps) {
     }
 
     else {
-      setCart(prevState => [...prevState, { price: priceId, quantity: 1, tax_rates: ["txr_1InQh4Dj1xJ2OZeJzUlFjU1e"] }])
+      setCart(prevState => [...prevState, { price: item.id, quantity: 1, tax_rates: ["txr_1InQh4Dj1xJ2OZeJzUlFjU1e"], product: item.product }])
     }
     
   }
 
-  const removeFromCart = (priceId: string) => {
+  const removeFromCart = (item) => {
 
     let exists = false
     let existsIndex = 0
 
-    cart.forEach((item, index) => {
-      if (item.price === priceId) {
+    cart.forEach((cartItem, index) => {
+      if (cartItem.price === item.id) {
         exists = true
         existsIndex = index
       }
@@ -86,31 +101,61 @@ export default function Store({ prices }: IProps) {
   console.log(cart)
 
   return (
+    
     <div>
-      <h1>Items</h1>
 
-      <ul>
-        {prices.map((price) => (
-          <li key={price.id}>
-            <h2>{price.product.name}</h2>
-            <img src={price.product.images[0]} style={{ width:50, height:50}} />
-            <p>Cost: ${((price.unit_amount as number) / 100).toFixed(2)}</p>
-            <button onClick={() => addToCart(price.id)}>Add</button>
-            <button onClick={() => removeFromCart(price.id)}>Remove</button>
-          </li>
-        ))}
-      </ul>
+      {itemImg ? 
+        <Modal 
+        open={true} 
+        onClose={() => setItemImg(null)}
+        style={{
+          marginTop: 50,
+          marginRight: 100,
+          marginBottom: 50,
+          marginLeft: 100,
+          overflow: "scroll"
+        }}>
+          <img src={itemImg} alt="item" width="100%"/>
 
-      <h1>cart</h1>
-      {cart.length > 0 ? 
-      cart.map((item) => {
-        console.log(item)
-        return <h1> {item.quantity} </h1>
-      })
+        </Modal>  
       :
-      null
+        null
       }
-        <button onClick={() => checkout(cart)}>Checkout</button>
+
+      <Grid container>
+        <Grid item className={classes.item} xs={12} sm={6}>
+          {items.map((item) => (
+            <div key={item.id}>
+              <Typography variant="h4" color="secondary">{item.product.name}</Typography>
+              <IconButton 
+                onClick={() => {setItemImg(item.product.images[0])}}
+              >
+                <Avatar src={item.product.images[0]} style={{ width:50, height:50}} />
+              </IconButton>
+              <p>Cost: ${((item.unit_amount as number) / 100).toFixed(2)}</p>
+              <Button variant="outlined" onClick={() => addToCart(item)}>Add</Button>
+              <Button variant="outlined" onClick={() => removeFromCart(item)}>Remove</Button>
+            </div>
+          ))}
+        </Grid>
+        <Grid item className={classes.item} xs={12} sm={6}>
+
+          {cart.length > 0 ? 
+          [cart.map((item) => (
+            <div key={item.price}>
+              <Typography variant="h4" color="secondary"> {item.product.name} </Typography>
+              <Typography variant="h4" color="secondary"> {item.quantity} </Typography>
+              <img src={item.product.images[0]} alt="item" width={200}/>
+            </div>
+          )),
+          <Button variant="outlined" onClick={() => checkout(cart)}>Checkout</Button>]
+          :
+          null
+          }
+          
+        </Grid>
+      </Grid>
+      
     </div>
   );
 }
@@ -126,5 +171,5 @@ export const getServerSideProps: GetServerSideProps = async () => {
     expand: ["data.product"],
   });
 
-  return { props: { prices: prices.data } };
+  return { props: { items: prices.data } };
 };

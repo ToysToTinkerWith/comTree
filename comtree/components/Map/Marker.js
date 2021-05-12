@@ -45,7 +45,7 @@ function Marker(props) {
 
       return (
         <div>
-          <IconButton onClick={() => [props.setTree(props.tree), props.setPage("tree")]} >
+          <IconButton onClick={() => [props.setTree(props.tree), props.setPage("Tree")]} >
             <Avatar src={props.tree.imageUrl} style={adoptstyle}/>
           </IconButton>
         </div>

@@ -20,8 +20,6 @@ const useStyles = makeStyles((theme) => ({
   title: {
     zIndex: 2,
     position: "absolute",
-    top: theme.spacing(1),
-    left: theme.spacing(1),
   },
   speedDial: {
     zIndex: 1,
@@ -31,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SpeedDials(props) {
+export default function Nav(props) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -47,13 +45,10 @@ export default function SpeedDials(props) {
     return (
       <div>
         <div>
-          <div className={classes.title}>
-          <Image src="/comtree.png" alt="comTree" width={135} height={45}  />
-          </div>
           <SpeedDial
             ariaLabel="Nav"
             className={classes.speedDial}
-            icon={<SpeedDialIcon />}
+            icon={<Image src="/comtreesymbolfinal.svg" alt="comTree" width={100} height={75}  />}
             onClose={handleClose}
             onOpen={handleOpen}
             open={open}
@@ -96,13 +91,10 @@ export default function SpeedDials(props) {
     return (
       <div>
         <div>
-          <div className={classes.title}>
-          <Image src="/comtree.png" alt="comTree" width={135} height={45}  />
-          </div>
           <SpeedDial
             ariaLabel="Nav"
             className={classes.speedDial}
-            icon={<SpeedDialIcon />}
+            icon={<Image src="/comtreesymbolfinal.svg" alt="comTree" width={100} height={75}  />}
             onClose={handleClose}
             onOpen={handleOpen}
             open={open}
