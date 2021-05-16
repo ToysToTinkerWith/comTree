@@ -6,9 +6,32 @@ import "firebase/firestore"
 import GoogleMapReact from 'google-map-react'
 import Marker from "./Marker"
 
-import { Avatar } from "@material-ui/core"
-
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
+
+const getMapOptions = (maps) => {
+
+  return {
+      streetViewControl: false,
+      scaleControl: true,
+      fullscreenControl: false,
+      
+      gestureHandling: "greedy",
+      mapTypeControl: true,
+      mapTypeId: maps.MapTypeId.SATELLITE,
+      mapTypeControlOptions: {
+          style: maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: maps.ControlPosition.TOP_LEFT,
+          mapTypeIds: [
+              maps.MapTypeId.ROADMAP,
+              maps.MapTypeId.SATELLITE,
+              maps.MapTypeId.HYBRID
+          ]
+      },
+
+      zoomControl: true,
+      clickableIcons: false
+  };
+}
 
 class Map extends React.Component {
 
@@ -66,6 +89,7 @@ class Map extends React.Component {
         <div style={{ height: "100vh",  width: "100%" }}>
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyBiB3iNngJM_kFWKxSv9a30O3fww7YTiWA"}}
+            options={getMapOptions}
             center={{lat: this.state.currentLoc.lat, lng: this.state.currentLoc.lng}}
             zoom={this.state.zoom}            
             onChange={({ zoom }) => {

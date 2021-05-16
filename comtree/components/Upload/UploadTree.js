@@ -27,6 +27,31 @@ const useStyles = makeStyles((theme) => ({
     width: '90%'
   }
 }))
+
+const getMapOptions = (maps) => {
+
+  return {
+      streetViewControl: false,
+      scaleControl: true,
+      fullscreenControl: false,
+      
+      gestureHandling: "greedy",
+      mapTypeControl: true,
+      mapTypeId: maps.MapTypeId.SATELLITE,
+      mapTypeControlOptions: {
+          style: maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: maps.ControlPosition.TOP_LEFT,
+          mapTypeIds: [
+              maps.MapTypeId.ROADMAP,
+              maps.MapTypeId.SATELLITE,
+              maps.MapTypeId.HYBRID
+          ]
+      },
+
+      zoomControl: true,
+      clickableIcons: false
+  };
+}
  
 function UploadTree(props) {
 
@@ -213,6 +238,7 @@ function UploadTree(props) {
       <div style={{ height: "100vh", width: "100%" }}>
         <GoogleMapReact
           bootstrapURLKeys={{ key: "AIzaSyBiB3iNngJM_kFWKxSv9a30O3fww7YTiWA"}}
+          options={getMapOptions}
           center={{lat : lat, lng : lng}}
           zoom={zoom}
           onClick={(event) => {

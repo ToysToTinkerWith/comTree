@@ -7,7 +7,6 @@ import PropTypes from "prop-types";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../theme";
-import globalstyles from "../styles/globals.css"
 
 
 export default function MyApp(props) {

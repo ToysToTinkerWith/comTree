@@ -10,7 +10,7 @@ import Profile from "../components/Profile/Profile"
 import Tree from "../components/Tree/Tree"
 
 
-export default function Root() {
+export default function Index() {
 
   const { user } = useAuth()
 
