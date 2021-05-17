@@ -8,8 +8,7 @@ import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import AddIcon from '@material-ui/icons/Add';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import ImageSearchIcon from '@material-ui/icons/ImageSearch';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
@@ -17,15 +16,10 @@ import Image from "next/image"
 
 
 const useStyles = makeStyles((theme) => ({
-  title: {
-    zIndex: 2,
-    position: "absolute",
-  },
   speedDial: {
-    zIndex: 1,
     position: 'absolute',
-    top: theme.spacing(1),
-    right: theme.spacing(1),
+    top: 15,
+    right: 5,
   },
 }));
 
@@ -55,32 +49,31 @@ export default function Nav(props) {
             direction={"left"}
           >
             <SpeedDialAction
-                icon={<ExitToAppIcon />}
-                tooltipTitle={"Logout"}
-                onClick={async () => {
-                    props.setPage("Map")
-                    await firebase.auth().signOut();
-                  }}
-              />
-            <SpeedDialAction
-              icon={<StorefrontIcon />}
-              tooltipTitle={"Store"}
-              href="/store"
-            />    
+              icon={<AddIcon />}
+              tooltipTitle={"Upload"}
+              tooltipPlacement="bottom"
+              onClick={() => props.setPage("Upload")}
+            />
             <SpeedDialAction
               icon={<AccountCircle />}
               tooltipTitle={"Profile"}
+              tooltipPlacement="bottom"
               onClick={() => props.setPage("Profile")}
             />
             <SpeedDialAction
-              icon={<AddIcon />}
-              tooltipTitle={"Upload"}
-              onClick={() => props.setPage("Upload")}
-            />  
+              icon={<StorefrontIcon />}
+              tooltipTitle={"Store"}
+              tooltipPlacement="bottom"
+              href="/store"
+            />    
             <SpeedDialAction
-              icon={<ImageSearchIcon />}
-              tooltipTitle={"Map"}
-              onClick={() => props.setPage("Map")}
+              icon={<ArrowBackIcon />}
+              tooltipTitle={"Logout"}
+              tooltipPlacement="bottom"
+              onClick={async () => {
+                  props.setPage("Map")
+                  await firebase.auth().signOut();
+                }}
             />
           </SpeedDial>
         </div>
@@ -104,17 +97,14 @@ export default function Nav(props) {
             <SpeedDialAction
               icon={<AccountBoxIcon />}
               tooltipTitle={"Login"}
+              tooltipPlacement="bottom"
               onClick={() => props.setPage("Auth")}
             />
             <SpeedDialAction
               icon={<StorefrontIcon />}
               tooltipTitle={"Store"}
+              tooltipPlacement="bottom"
               href="/store"
-            />
-            <SpeedDialAction
-              icon={<ImageSearchIcon />}
-              tooltipTitle={"Map"}
-              onClick={() => props.setPage("Map")}
             />
           </SpeedDial>
         </div>

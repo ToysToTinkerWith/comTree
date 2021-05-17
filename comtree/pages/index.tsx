@@ -9,12 +9,14 @@ import UploadTree from "../components/Upload/UploadTree"
 import Profile from "../components/Profile/Profile"
 import Tree from "../components/Tree/Tree"
 
+import { Modal } from "@material-ui/core"
+
 
 export default function Index() {
 
   const { user } = useAuth()
 
-  const [page, setPage] = useState("Map")
+  const [page, setPage] = useState("")
   const [tree, setTree] = useState(null)
 
   return (
@@ -27,32 +29,82 @@ export default function Index() {
     
     <Nav user={user} setPage={setPage} />
 
-    {page === "Map" ?
     <Map user={user} setPage={setPage} setTree={setTree} />
-    :
-    null
-    }
+
+    
 
     {page === "Auth" ?
+    <Modal 
+    open={true} 
+    onClose={() => setPage("")}
+    style={{
+      marginTop: 50,
+      marginRight: 100,
+      marginBottom: 50,
+      marginLeft: 100,
+      overflowY: "auto",
+      overflowX: "hidden"
+    }}>
     <Auth setPage={setPage}/>
+  </Modal>
+    
     :
     null
     }
 
     {page === "Upload" ?
+    <Modal 
+    open={true} 
+    onClose={() => setPage("")}
+    style={{
+      marginTop: 50,
+      marginRight: 100,
+      marginBottom: 50,
+      marginLeft: 100,
+      overflowY: "auto",
+      overflowX: "hidden"
+    }}>
     <UploadTree user={user}/>
+  </Modal>
+    
     :
     null
     }
 
     {page === "Profile" ?
+    <Modal 
+    open={true} 
+    onClose={() => setPage("")}
+    style={{
+      marginTop: 50,
+      marginRight: 100,
+      marginBottom: 50,
+      marginLeft: 100,
+      overflowY: "auto",
+      overflowX: "hidden"
+    }}>
     <Profile user={user} setPage={setPage} setTree={setTree}/>
+  </Modal>
+    
     :
     null
     }
 
     {page === "Tree" ?
+    <Modal 
+    open={true} 
+    onClose={() => setPage("")}
+    style={{
+      marginTop: 50,
+      marginRight: 100,
+      marginBottom: 50,
+      marginLeft: 100,
+      overflowY: "auto",
+      overflowX: "hidden"
+    }}>
     <Tree user={user} tree={tree} />
+  </Modal>
+    
     :
     null
     }

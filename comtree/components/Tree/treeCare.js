@@ -24,7 +24,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#FFFFF0",
     borderRadius: "15px",
     boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-    padding: "10px"
+    padding: "10px",
+    textAlign: "center"
 
   }
 }))
@@ -84,7 +85,7 @@ function TreeCare(props) {
       <div>
 
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={5}>
+          <Grid item sm={12} md={5}>
             <TextField
               name="watered"
               label="Watered"
@@ -111,7 +112,7 @@ function TreeCare(props) {
             />
 
           </Grid>
-          <Grid item xs={12} sm={7}>
+          <Grid item sm={12} md={7}>
            <TextField
               name="wiki"
               label="Wikipedia"

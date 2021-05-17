@@ -27,6 +27,7 @@ interface IProps {
 export default function Store({ items }: IProps) {
 
   const [cart, setCart] = useState([])
+  const [disCart, setDisCart] = useState([])
   const [itemImg, setItemImg] = useState(null)
 
   const classes = useStyles()
@@ -50,7 +51,8 @@ export default function Store({ items }: IProps) {
     }
 
     else {
-      setCart(prevState => [...prevState, { price: item.id, quantity: 1, tax_rates: ["txr_1InQh4Dj1xJ2OZeJzUlFjU1e"], product: item.product }])
+      setCart(prevState => [...prevState, { price: item.id, quantity: 1, tax_rates: ["txr_1InQh4Dj1xJ2OZeJzUlFjU1e"] }])
+      setDisCart(prevState => [...prevState, { product: item.product } ])
     }
     
   }
@@ -69,13 +71,19 @@ export default function Store({ items }: IProps) {
 
     if (exists) {
       let newCart = [...cart]
+      let newDisCart = [...disCart]
       if (newCart[existsIndex].quantity === 1){
         newCart.splice(existsIndex, 1)
+        newDisCart.splice(existsIndex, 1)
+        setCart(newCart)
+        setDisCart(newDisCart)
       }
       else {
         newCart[existsIndex].quantity = newCart[existsIndex].quantity - 1
+        setCart(newCart)
       }
-      setCart(newCart)
+      
+      
     }
     
   }
@@ -141,11 +149,11 @@ export default function Store({ items }: IProps) {
         <Grid item className={classes.item} xs={12} sm={6}>
 
           {cart.length > 0 ? 
-          [cart.map((item) => (
+          [cart.map((item, index) => (
             <div key={item.price}>
-              <Typography variant="h4" color="secondary"> {item.product.name} </Typography>
+              <Typography variant="h4" color="secondary"> {disCart[index].product.name} </Typography>
               <Typography variant="h4" color="secondary"> {item.quantity} </Typography>
-              <img src={item.product.images[0]} alt="item" width={200}/>
+              <img src={disCart[index].product.images[0]} alt="item" width={200}/>
             </div>
           )),
           <Button variant="outlined" onClick={() => checkout(cart)}>Checkout</Button>]

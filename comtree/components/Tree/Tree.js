@@ -9,8 +9,6 @@ import TreeCare from "./treeCare"
 
 import { Button, Modal, Typography, Avatar, IconButton } from "@material-ui/core"
 
-let isMounted = false
-
 class Tree extends React.Component {
   constructor() {
     super()
@@ -28,7 +26,6 @@ class Tree extends React.Component {
   }
 
   componentDidMount() {
-    isMounted = true
     firebase.firestore().collection("publicTrees").onSnapshot(snapshot => {
       let thisTree = null
       let thisId = null
@@ -50,29 +47,21 @@ class Tree extends React.Component {
               incomingIds.push(doc.id)
             })
 
-            if (isMounted) {
               this.setState({
                 posts: incomingPosts,
                 postIds: incomingIds,
               })
-            }
 
           })
         }
       })
       
-      if (isMounted) {
         this.setState({
           tree: thisTree,
           treeId: thisId
       })
-      }
       
     })
-  }
-
-  componentWillUnmount(){
-    isMounted = false
   }
 
   hugTree(uid) {
@@ -147,7 +136,8 @@ class Tree extends React.Component {
                   marginRight: 100,
                   marginBottom: 50,
                   marginLeft: 100,
-                  overflow: "scroll"
+                  overflowY: "auto",
+                  overflowX: "hidden"
                 }}>
                 <Post treeId={this.props.psudeoId} user={this.props.user} />
                 </Modal> 
@@ -163,7 +153,8 @@ class Tree extends React.Component {
                   marginRight: 100,
                   marginBottom: 50,
                   marginLeft: 100,
-                  overflow: "scroll"
+                  overflowY: "auto",
+                  overflowX: "hidden"
                 }}>
                 <TreeCare treeId={this.state.treeId} tree={this.state.tree} />
                 </Modal> 
@@ -196,7 +187,8 @@ class Tree extends React.Component {
                   marginRight: 100,
                   marginBottom: 50,
                   marginLeft: 100,
-                  overflow: "scroll"
+                  overflowY: "auto",
+                  overflowX: "hidden"
                 }}>
                 <div style={treestyle}>
                 <PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} />
@@ -243,9 +235,12 @@ class Tree extends React.Component {
                   marginRight: 100,
                   marginBottom: 50,
                   marginLeft: 100,
-                  overflow: "scroll"
+                  overflowY: "auto",
+                  overflowX: "hidden"
                 }}>
+                <div style={treestyle}>
                 <PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} />
+                </div>
                 </Modal>
                 :
                 null}

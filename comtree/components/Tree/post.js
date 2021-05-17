@@ -120,7 +120,7 @@ function Post(props) {
       <div>
 
         <Grid container spacing={4}>
-          <Grid item xs={12} sm={7}>
+          <Grid item sm={12} md={7}>
             <TextField
             label="Description"
             name="description"
@@ -131,7 +131,7 @@ function Post(props) {
             onChange={handleChange}
           />
           </Grid>
-          <Grid item xs={12} sm={5}>
+          <Grid item sm={12} md={5}>
             <Input className={classes.image} id="image" name="image" type="file"
             onChange={(event) => {
               setFieldValue("image", event.target.files[0])

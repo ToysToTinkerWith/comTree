@@ -5,13 +5,11 @@ import "firebase/storage"
 
 import GoogleMapReact from 'google-map-react';
 import UploadMarker from "./UploadMarker"
-import Image from "next/image"
 
-import NatureIcon from '@material-ui/icons/Nature';
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 
 import { Formik, Form } from 'formik';
-import { Button, Typography, TextField, Input, CircularProgress, Box, Avatar, makeStyles } from '@material-ui/core'
+import { Button, Typography, Avatar, TextField, Input, CircularProgress, Box, Grid, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   confirm: {
@@ -21,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     color: "red"
   },
   name: {
-    width: '40ch'
+    width: '70%'
   },
   description: {
     width: '90%'
@@ -34,6 +32,7 @@ const getMapOptions = (maps) => {
       streetViewControl: false,
       scaleControl: true,
       fullscreenControl: false,
+      disableDoubleClickZoom: true,
       
       gestureHandling: "greedy",
       mapTypeControl: true,
@@ -144,7 +143,8 @@ function UploadTree(props) {
     borderRadius: "15px",
     boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
     paddingLeft: "10px",
-    paddingRight: "10px"
+    paddingRight: "10px",
+    textAlign: "center"
   }
 
 
@@ -194,7 +194,7 @@ function UploadTree(props) {
           handleUpload(values)
           setSubmitting(false)
           resetForm({})
-          setConfirm("Tree upload success.")
+          setConfirm("Tree upload success")
 
         }, 400);
       }}
@@ -212,59 +212,68 @@ function UploadTree(props) {
       <Form onSubmit={handleSubmit} autoComplete="off" >
       <br/>
 
-      <Box margin={5}>
-          <TextField
-          label="Tree Name"
-          name="name"
-          className={classes.name}
-          onChange={handleChange}
-        />
-      </Box>
+      <Grid container spacing={4}>
+          <Grid item sm={12} md={5}>
+            <div>
+              <Box margin={5}>
+                <TextField
+                  label="Tree Name"
+                  name="name"
+                  className={classes.name}
+                  onChange={handleChange}
+                />
+              </Box>
+                
+              <Box margin = {5}>
+                <TextField
+                  label="Description"
+                  name="description"
+                  multiline
+                  className={classes.description}
+                  rows={8}
+                  variant="outlined"
+                  onChange={handleChange}
+                />
+              </Box>
+            </div>
+          </Grid>
+          <Grid item sm={12} md={7}>
+            <div style={{ height: "50vh", width: "100%" }}>
+              <GoogleMapReact
+                bootstrapURLKeys={{ key: "AIzaSyBiB3iNngJM_kFWKxSv9a30O3fww7YTiWA"}}
+                options={getMapOptions}
+                center={{lat : lat, lng : lng}}
+                zoom={zoom}
+                onClick={(event) => {
+
+                  setFieldValue("lat", event.lat)
+                  setFieldValue("lng", event.lng)
+                  
+                }}
+              >
+
+                {displayTrees.length > 0 ? displayTrees.map(tree => {
+                  return <UploadMarker key={tree.psudeoId} lat={tree.latitude} lng={tree.longitude} imageUrl={tree.imageUrl} />
+                }) :  null }
+
+                {found ? 
+                  <PersonPinCircleIcon lat={lat} lng={lng} style={{ width: 25, height: 25 }} /> 
+                  :
+                  null
+                }
+
+                <Avatar lat={values.lat} lng={values.lng} src="comtreesymbolfinal.svg" alt="tree" />
+
+
+              </GoogleMapReact>
+            </div>
+          </Grid>
+      </Grid>
+
+      
       <br />
-            
-      <Box margin = {5}>
-      <TextField
-          label="Description"
-          name="description"
-          multiline
-          className={classes.description}
-          rows={8}
-          variant="outlined"
-          onChange={handleChange}
-        />
-      </Box>
-      <br />
 
-      <div style={{ height: "100vh", width: "100%" }}>
-        <GoogleMapReact
-          bootstrapURLKeys={{ key: "AIzaSyBiB3iNngJM_kFWKxSv9a30O3fww7YTiWA"}}
-          options={getMapOptions}
-          center={{lat : lat, lng : lng}}
-          zoom={zoom}
-          onClick={(event) => {
-
-            setFieldValue("lat", event.lat)
-            setFieldValue("lng", event.lng)
-            
-          }}
-        >
-
-      {displayTrees.length > 0 ? displayTrees.map(tree => {
-        return <UploadMarker key={tree.psudeoId} lat={tree.latitude} lng={tree.longitude} imageUrl={tree.imageUrl} />
-      }) :  null }
-
-      {found ? 
-        <PersonPinCircleIcon lat={lat} lng={lng} style={{ width: 25, height: 25 }} /> 
-        :
-        null
-      }
-
-       <Image src="/comtreesym.png" alt="tree" width={100} height={100} lat={values.lat} lng={values.lng}  />
-
-        
-          
-        </GoogleMapReact>
-    </div>
+     
 
         
       <div style={{marginLeft: 20}}>

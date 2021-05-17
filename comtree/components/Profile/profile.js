@@ -5,7 +5,7 @@ import "firebase/firestore"
 import EditProfile from "./EditProfile"
 import MyTrees from "./MyTrees"
 
-import { Typography, Avatar, IconButton } from "@material-ui/core"
+import { Typography, Modal, Avatar, IconButton } from "@material-ui/core"
 import PersonIcon from '@material-ui/icons/Person'
 
 class Profile extends React.Component {
@@ -86,7 +86,20 @@ class Profile extends React.Component {
           <Typography variant="subtitle1" align="center" color="secondary"> {this.state.profile.bio} </Typography>
 
         {this.state.editing ? 
-          <EditProfile bio={this.state.profile.bio} setEdit={this.setEdit} user={this.props.user}/> :
+          <Modal 
+          open={true} 
+          onClose={() => this.setState({editing: false})}
+          style={{
+            marginTop: 50,
+            marginRight: 100,
+            marginBottom: 50,
+            marginLeft: 100,
+            overflowY: "auto",
+            overflowX: "hidden"
+          }}>
+          <EditProfile bio={this.state.profile.bio} setEdit={this.setEdit} user={this.props.user}/>
+          </Modal>
+          :
           null }
           
         <br />
