@@ -1,0 +1,149 @@
+import React from 'react'
+
+import firebase from "firebase/app"
+import "firebase/firestore"
+
+import { DataGrid } from '@material-ui/data-grid'
+import { Button, Typography } from '@material-ui/core/'
+
+
+
+class Database extends React.Component {
+
+ constructor() {
+    super()
+    this.state = {
+      trees: [],
+      posts: []
+    }
+
+  }
+
+componentDidMount = () => {
+
+    firebase.firestore().collection("publicTrees").onSnapshot(querySnapshot => {
+
+      this.setState({ trees: [], posts: [] })
+
+      querySnapshot.forEach(doc => {
+
+        let tree = doc.data()
+        tree.id = doc.id
+
+        this.setState(prevState => ({
+            trees: [...prevState.trees, tree]
+          }))
+
+        firebase.firestore().collection("publicTrees").doc(doc.id).collection("posts")
+        .get().then(querySnapshot => {
+
+          let self = this
+
+          querySnapshot.forEach(function(doc) {
+            let post = doc.data()
+            post.id = doc.id
+            post.tree = tree
+
+            self.setState(prevState => ({
+              posts: [...prevState.posts, post]
+            }))
+
+          })
+
+
+        })
+
+      })
+      
+
+    })
+
+
+}
+    
+
+    
+
+render() {
+
+const treeColumns = [
+    { 
+    field: 'name', 
+    headerName: 'Tree Name', 
+    width: 180,
+    renderCell: (params) => (
+          
+        <Button
+        variant="contained"
+        color="Secondary"
+        size="small"
+        style={{ padding: 10 }}
+        onClick={() => [this.props.setTree(params.row), this.props.setPage("Tree")]}
+      >
+        {params.row.name} 
+        </Button>
+    ),
+    }
+]
+const postColumns = [
+    { 
+    field: 'postedBy', 
+    headerName: 'Posted By', 
+    width: 180 
+    },
+    { 
+    field: 'treeName', 
+    headerName: 'Tree Name', 
+    width: 180,
+    renderCell: (params) => (
+            
+        <Button
+        variant="contained"
+        color="Secondary"
+        size="small"
+        style={{ padding: 10 }}
+        onClick={() => [this.props.setTree(params.row.tree), this.props.setPage("Tree")]}
+        >
+        {params.row.tree.name} 
+        </Button>
+    ),
+    }
+]
+
+  const uploadstyle = {
+    backgroundColor: "#FFFFF0",
+    borderRadius: "15px",
+    boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+    width: "100%"
+
+  }
+
+
+  if (this.state.trees.length > 0) {
+    console.log("here")
+    return (
+    <div style={uploadstyle}>
+        <Typography variant="h2" color="Secondary" align="center" >
+         Trees
+        </Typography>
+        <DataGrid rows={this.state.trees} columns={treeColumns} autoHeight={true}/>
+        <Typography variant="h2" color="Secondary" align="center" >
+         Posts
+        </Typography>
+        <DataGrid rows={this.state.posts} columns={postColumns} autoHeight={true}/>
+    </div>
+  )
+  }
+
+  else {
+    return (
+      <div>
+      </div>
+    )
+  }
+}
+  
+  
+}
+
+export default Database

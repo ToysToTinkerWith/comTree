@@ -17,7 +17,6 @@ const getMapOptions = (maps) => {
       fullscreenControl: false,
       
       gestureHandling: "greedy",
-      disableDoubleClickZoom: true,
 
       mapTypeControl: true,
       mapTypeId: maps.MapTypeId.SATELLITE,

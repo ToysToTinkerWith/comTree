@@ -10,6 +10,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import AddIcon from '@material-ui/icons/Add';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import StorefrontIcon from '@material-ui/icons/Storefront';
 
 import Image from "next/image"
@@ -61,6 +62,12 @@ export default function Nav(props) {
               onClick={() => props.setPage("Profile")}
             />
             <SpeedDialAction
+              icon={<AssignmentIcon />}
+              tooltipTitle={"Mission"}
+              tooltipPlacement="bottom"
+              onClick={() => props.setPage("Mission")}
+            />
+            <SpeedDialAction
               icon={<StorefrontIcon />}
               tooltipTitle={"Store"}
               tooltipPlacement="bottom"
@@ -99,6 +106,12 @@ export default function Nav(props) {
               tooltipTitle={"Login"}
               tooltipPlacement="bottom"
               onClick={() => props.setPage("Auth")}
+            />
+            <SpeedDialAction
+              icon={<AssignmentIcon />}
+              tooltipTitle={"Mission"}
+              tooltipPlacement="bottom"
+              onClick={() => props.setPage("Mission")}
             />
             <SpeedDialAction
               icon={<StorefrontIcon />}

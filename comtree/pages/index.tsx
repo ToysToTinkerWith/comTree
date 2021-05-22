@@ -7,9 +7,12 @@ import Map from "../components/Map/Map"
 import Auth from "../components/Auth/Auth"
 import UploadTree from "../components/Upload/UploadTree"
 import Profile from "../components/Profile/Profile"
+import Mission from "../components/Mission/Mission"
 import Tree from "../components/Tree/Tree"
+import Database from "../components/Database/Database"
 
-import { Modal } from "@material-ui/core"
+import { Modal, Fab } from "@material-ui/core"
+import StorageIcon from '@material-ui/icons/Storage';
 
 
 export default function Index() {
@@ -31,6 +34,18 @@ export default function Index() {
 
     <Map user={user} setPage={setPage} setTree={setTree} />
 
+    {user ?
+    user.uid === "K5TMyBC5ycfPal15xDtmLuynYvJ2" ?
+    <Fab  color="primary" 
+    style={{position: "absolute", top: 155, right: 5}}
+    onClick={() => setPage("Database")}>
+    <StorageIcon />
+    </Fab> 
+    :
+    null
+    :
+    null}
+
     
 
     {page === "Auth" ?
@@ -46,7 +61,7 @@ export default function Index() {
       overflowX: "hidden"
     }}>
     <Auth setPage={setPage}/>
-  </Modal>
+    </Modal>
     
     :
     null
@@ -65,7 +80,7 @@ export default function Index() {
       overflowX: "hidden"
     }}>
     <UploadTree user={user}/>
-  </Modal>
+    </Modal>
     
     :
     null
@@ -84,7 +99,26 @@ export default function Index() {
       overflowX: "hidden"
     }}>
     <Profile user={user} setPage={setPage} setTree={setTree}/>
-  </Modal>
+    </Modal>
+    
+    :
+    null
+    }
+
+    {page === "Mission" ?
+    <Modal 
+    open={true} 
+    onClose={() => setPage("")}
+    style={{
+      marginTop: 50,
+      marginRight: 100,
+      marginBottom: 50,
+      marginLeft: 100,
+      overflowY: "auto",
+      overflowX: "hidden"
+    }}>
+    <Mission />
+    </Modal>
     
     :
     null
@@ -103,7 +137,26 @@ export default function Index() {
       overflowX: "hidden"
     }}>
     <Tree user={user} tree={tree} />
-  </Modal>
+    </Modal>
+    
+    :
+    null
+    }
+
+    {page === "Database" ?
+    <Modal 
+    open={true} 
+    onClose={() => setPage("")}
+    style={{
+      marginTop: 50,
+      marginRight: 100,
+      marginBottom: 50,
+      marginLeft: 100,
+      overflowY: "auto",
+      overflowX: "hidden"
+    }}>
+    <Database setPage={setPage} setTree={setTree}/>
+    </Modal>
     
     :
     null
