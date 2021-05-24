@@ -85,30 +85,7 @@ const treeColumns = [
     ),
     }
 ]
-const postColumns = [
-    { 
-    field: 'postedBy', 
-    headerName: 'Posted By', 
-    width: 180 
-    },
-    { 
-    field: 'treeName', 
-    headerName: 'Tree Name', 
-    width: 180,
-    renderCell: (params) => (
-            
-        <Button
-        variant="contained"
-        color="Secondary"
-        size="small"
-        style={{ padding: 10 }}
-        onClick={() => [this.props.setTree(params.row.tree), this.props.setPage("Tree")]}
-        >
-        {params.row.tree.name} 
-        </Button>
-    ),
-    }
-]
+
 
   const uploadstyle = {
     backgroundColor: "#FFFFF0",
@@ -120,17 +97,13 @@ const postColumns = [
 
 
   if (this.state.trees.length > 0) {
-    console.log("here")
     return (
     <div style={uploadstyle}>
         <Typography variant="h2" color="Secondary" align="center" >
          Trees
         </Typography>
         <DataGrid rows={this.state.trees} columns={treeColumns} autoHeight={true}/>
-        <Typography variant="h2" color="Secondary" align="center" >
-         Posts
-        </Typography>
-        <DataGrid rows={this.state.posts} columns={postColumns} autoHeight={true}/>
+        
     </div>
   )
   }

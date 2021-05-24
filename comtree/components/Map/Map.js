@@ -115,6 +115,7 @@ class Map extends React.Component {
           
           </GoogleMapReact>
           <Fab  color="primary" 
+                tooltip="Location"
                 style={{position: "absolute", top: 85, right: 5}}
                 onClick={() => this.getUserLocation()}>
           <PersonPinCircleIcon />

@@ -6,8 +6,12 @@ import PostDisplay from "./postDisplay"
 import Post from "./post"
 import Comment from "./comment"
 import TreeCare from "./treeCare"
+import EditTree from "./editTree"
 
 import { Button, Modal, Typography, Avatar, IconButton } from "@material-ui/core"
+import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
+import EditIcon from '@material-ui/icons/Edit';
+import FlagIcon from '@material-ui/icons/Flag';
 
 class Tree extends React.Component {
   constructor() {
@@ -104,6 +108,13 @@ class Tree extends React.Component {
 
                 <Typography variant="h4" align="center" color="secondary"> {this.state.tree.name} </Typography>
                 <br />
+
+                <div style={{position: "absolute", top: 15, left: 15 }}>
+                  <Typography variant="h6" color="Secondary"> 
+                  <AccessibilityNewIcon />
+                  {this.state.tree.huggedBy.length}
+                  </Typography>
+                </div>
                 
                 {this.state.tree.huggedBy.includes(this.props.user.uid) ? 
                 <Button color="secondary" variant="outlined" onClick={() => {
@@ -115,15 +126,41 @@ class Tree extends React.Component {
                 }
 
                 <Button color="secondary" variant="outlined" onClick={() => {
-                  this.state.status === "post" ? this.setState({status: "none"}) :
                   this.setState({status: "post"})
                 }} > Post </Button>
 
                 <Button color="secondary" variant="outlined" onClick={() => {
-                  this.state.status === "tree" ? this.setState({status: "none"}) :
                   this.setState({status: "tree"})
                 }} > Tree </Button>
 
+                {this.props.admins.includes(this.props.user.uid) ?
+                  <Button color="secondary" variant="outlined" 
+                  style={{
+                    position: "absolute",
+                    top: 15,
+                    right: 15
+                  }}
+                  onClick={() => {
+                    this.setState({status: "edit"})
+                  }} >
+                    <EditIcon />
+                  </Button>
+                  :
+                  <Button color="secondary" variant="outlined" 
+                  style={{
+                    position: "absolute",
+                    top: 15,
+                    right: 15
+                  }}
+                  onClick={() => {
+                    this.setState({status: "flag"})
+                  }} >
+                    <FlagIcon />
+                  </Button>
+  
+                }
+
+                
                 <br />
                 <br />
 
@@ -161,11 +198,25 @@ class Tree extends React.Component {
                 : 
                 null}
 
+                {this.state.status === "edit" ?
+                <Modal 
+                open={true} 
+                onClose={() => this.setState({status: "none"})}
+                style={{
+                  marginTop: 50,
+                  marginRight: 100,
+                  marginBottom: 50,
+                  marginLeft: 100,
+                  overflowY: "auto",
+                  overflowX: "hidden"
+                }}>
+                <EditTree tree={this.state.tree} treeId={this.state.treeId} />
+                </Modal> 
+                : 
+                null}
+
                 {this.state.posts.length > 0 ? this.state.posts.map((post, index) => {
-                  return [<IconButton onClick={() => this.state.post ?
-                  this.state.post.psudeoId === post.psudeoId ?
-                    this.setState({post: null, postId: null}) : 
-                    this.setState({post: post, postId: this.state.postIds[index]}) :
+                  return [<IconButton onClick={() =>
                     this.setState({post: post, postId: this.state.postIds[index]})
                   } >
           <Avatar src={post.imageUrl} alt="" style={{ height: '200px', width: '200px', float:"left" }} />

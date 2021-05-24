@@ -22,6 +22,8 @@ export default function Index() {
   const [page, setPage] = useState("")
   const [tree, setTree] = useState(null)
 
+  const admins = ["K5TMyBC5ycfPal15xDtmLuynYvJ2"]
+
   return (
     <main>
     <Head>
@@ -35,7 +37,7 @@ export default function Index() {
     <Map user={user} setPage={setPage} setTree={setTree} />
 
     {user ?
-    user.uid === "K5TMyBC5ycfPal15xDtmLuynYvJ2" ?
+    admins.includes(user.uid) ?
     <Fab  color="primary" 
     style={{position: "absolute", top: 155, right: 5}}
     onClick={() => setPage("Database")}>
@@ -136,7 +138,7 @@ export default function Index() {
       overflowY: "auto",
       overflowX: "hidden"
     }}>
-    <Tree user={user} tree={tree} />
+    <Tree user={user} tree={tree} admins={admins}/>
     </Modal>
     
     :

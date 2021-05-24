@@ -94,7 +94,9 @@ function UploadTree(props) {
             imageUrl: url,
             watered: null,
             fert: null,
+            weeded: null,
             wiki: null,
+            flag: null
           }).then(
             firebase.firestore().collection("publicTrees").where("psudeoId", "==", generatedId).get()
             .then(function(querySnapshot) {
