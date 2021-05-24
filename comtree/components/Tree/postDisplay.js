@@ -72,8 +72,8 @@ class PostDisplay extends React.Component {
 
     return (
       <div>
-        <hr />
         <div>
+          
           <Typography variant="h4" color="secondary" > {this.props.post.description} </Typography>
           <img src={this.props.post.imageUrl} style={{ borderRadius: "15px" }} alt="" width="100%" /> 
           <Typography variant="h5" color="secondary"> Posted By: {this.props.post.postedBy} </Typography>

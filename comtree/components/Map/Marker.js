@@ -1,6 +1,7 @@
 import React from "react"
 
 import { Avatar, IconButton } from "@material-ui/core"
+import FlagIcon from '@material-ui/icons/Flag';
 
 function Marker(props) {
 
@@ -43,6 +44,15 @@ function Marker(props) {
         }
     }
 
+    if (props.tree.flag !== "") {
+      return (
+        <div>
+          <FlagIcon style={{ color: "yellow", width: props.width, height: props.width }}/>
+        </div>
+      )
+    }
+
+    else {
       return (
         <div>
           <IconButton onClick={() => [props.setTree(props.tree), props.setPage("Tree")]} >
@@ -50,6 +60,9 @@ function Marker(props) {
           </IconButton>
         </div>
     )
+    }
+
+      
     
   }
 

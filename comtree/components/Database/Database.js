@@ -27,9 +27,21 @@ componentDidMount = () => {
 
       querySnapshot.forEach(doc => {
 
+        /*
+        firebase.firestore().collection("publicTrees").doc(doc.id).update({
+          flag: ""
+        })
+        */
+
         let tree = doc.data()
         tree.id = doc.id
 
+        if (tree.timestamp) {
+          tree.created = tree.timestamp.toDate()
+
+        }
+
+        
         this.setState(prevState => ({
             trees: [...prevState.trees, tree]
           }))
@@ -68,6 +80,13 @@ render() {
 
 const treeColumns = [
     { 
+    field: 'created', 
+    headerName: 'Created', 
+    width: 150,
+    type: "date"
+    
+    },
+    { 
     field: 'name', 
     headerName: 'Tree Name', 
     width: 180,
@@ -83,7 +102,14 @@ const treeColumns = [
         {params.row.name} 
         </Button>
     ),
-    }
+    },
+    { 
+      field: 'flag', 
+      headerName: 'Flag', 
+      width: "100%",
+      
+      },
+
 ]
 
 

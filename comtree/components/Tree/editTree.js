@@ -6,7 +6,7 @@ import GoogleMapReact from 'google-map-react';
 import UploadMarker from "../Upload/uploadMarker"
 
 import { Formik, Form } from 'formik';
-import { Button, TextField, Grid, makeStyles } from '@material-ui/core'
+import { Button, IconButton, Typography, TextField, Avatar, Grid, makeStyles } from '@material-ui/core'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -50,6 +50,8 @@ const getMapOptions = (maps) => {
         clickableIcons: false
     };
 }
+
+
  
 export default function EditTree(props) {
 
@@ -57,11 +59,25 @@ export default function EditTree(props) {
 
     const handleUpload = (formData) => {
 
-        firebase.firestore().collection("publicTrees").doc(props.treeId).update({
+        if (formData.flag === "delete tree") {
+          firebase.firestore().collection("publicTrees").doc(props.treeId).delete()
+        }
+
+        else if (formData.flag === "delete post") {
+          firebase.firestore().collection("publicTrees").doc(props.treeId)
+          .collection("posts").doc(formData.postId).delete()
+        }
+
+        else {
+          firebase.firestore().collection("publicTrees").doc(props.treeId).update({
             name: formData.name,
             latitude: formData.lat,
-            longitude: formData.lng
+            longitude: formData.lng,
+            flag: formData.flag
         })
+        }
+
+        
 
   }
 
@@ -73,7 +89,9 @@ export default function EditTree(props) {
       initialValues = {{ 
         name: props.tree.name,
         lat: props.tree.latitude,
-        lng: props.tree.longitude
+        lng: props.tree.longitude,
+        flag: props.tree.flag,
+        postId: ""
     }}
 
     validate = {values => {
@@ -106,7 +124,6 @@ export default function EditTree(props) {
 
         <Grid container spacing={4}>
           <Grid item sm={12} md={5}>
-              <div>
               <TextField
                 label="Name"
                 name="name"
@@ -114,7 +131,23 @@ export default function EditTree(props) {
                 className={classes.name}
                 onChange={handleChange}
                 />
-              </div>
+                <TextField
+                label="Flag"
+                name="flag"
+                multiline
+                defaultValue={props.tree.flag}
+                className={classes.name}
+                rows={4}
+                variant="outlined"
+                onChange={handleChange}
+                />
+                <TextField
+                label="Post Id"
+                name="postId"
+                className={classes.name}
+                variant="outlined"
+                onChange={handleChange}
+                />   
             
           </Grid>
           <Grid item sm={12} md={7}>
@@ -140,8 +173,25 @@ export default function EditTree(props) {
           </Grid>
         </Grid>
         
-      </div>      
+      </div>
+      <br />
+      {props.posts.length > 0 ? props.posts.map((post, index) => {
+        return (
+          <div style={{display: "inline-grid", padding: 10, border: "1px solid black", borderRadius: "15px"}}>
+          <Avatar src={post.imageUrl} alt="" style={{ height: '100px', width: '100px', margin: "auto" }} />
+          <Typography variant="subtitle" color="secondary" > {props.postIds[index]} </Typography>
+          </div>
 
+        )
+          
+        
+      })
+      :
+      null
+      }      
+      
+
+      <br />
       <br />
 
       <Button type="submit" color="secondary" variant="outlined" disabled={isSubmitting}> Update </Button>
@@ -150,6 +200,8 @@ export default function EditTree(props) {
       <br />
 
       </Form>
+
+      
 
 
       )}

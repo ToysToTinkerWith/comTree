@@ -7,6 +7,7 @@ import Post from "./post"
 import Comment from "./comment"
 import TreeCare from "./treeCare"
 import EditTree from "./editTree"
+import FlagTree from "./flagTree"
 
 import { Button, Modal, Typography, Avatar, IconButton } from "@material-ui/core"
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
@@ -210,7 +211,24 @@ class Tree extends React.Component {
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
-                <EditTree tree={this.state.tree} treeId={this.state.treeId} />
+                <EditTree tree={this.state.tree} treeId={this.state.treeId} posts={this.state.posts} postIds={this.state.postIds}/>
+                </Modal> 
+                : 
+                null}
+
+                {this.state.status === "flag" ?
+                <Modal 
+                open={true} 
+                onClose={() => this.setState({status: "none"})}
+                style={{
+                  marginTop: 50,
+                  marginRight: 100,
+                  marginBottom: 50,
+                  marginLeft: 100,
+                  overflowY: "auto",
+                  overflowX: "hidden"
+                }}>
+                <FlagTree treeId={this.state.treeId} />
                 </Modal> 
                 : 
                 null}
@@ -242,7 +260,7 @@ class Tree extends React.Component {
                   overflowX: "hidden"
                 }}>
                 <div style={treestyle}>
-                <PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} />
+                <PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} user={this.props.user} admins={this.props.admins} />
                 <Comment user={this.props.user} treeId={this.state.treeId} postId={this.state.postId} />
                 </div>
                 </Modal>

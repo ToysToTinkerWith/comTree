@@ -12,6 +12,7 @@ import { Formik, Form } from 'formik';
 import { Button, Typography, Avatar, TextField, Input, CircularProgress, Box, Grid, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
+
   confirm: {
     color: "green"
   },
@@ -22,7 +23,9 @@ const useStyles = makeStyles((theme) => ({
     width: '70%'
   },
   description: {
-    width: '90%'
+    width: '90%',
+    marginTop: 50,
+    marginBottom: 50
   }
 }))
 
@@ -96,7 +99,7 @@ function UploadTree(props) {
             fert: null,
             weeded: null,
             wiki: null,
-            flag: null
+            flag: ""
           }).then(
             firebase.firestore().collection("publicTrees").where("psudeoId", "==", generatedId).get()
             .then(function(querySnapshot) {
@@ -217,16 +220,13 @@ function UploadTree(props) {
       <Grid container spacing={4}>
           <Grid item sm={12} md={5}>
             <div>
-              <Box margin={5}>
                 <TextField
                   label="Tree Name"
                   name="name"
                   className={classes.name}
                   onChange={handleChange}
                 />
-              </Box>
                 
-              <Box margin = {5}>
                 <TextField
                   label="Description"
                   name="description"
@@ -236,7 +236,12 @@ function UploadTree(props) {
                   variant="outlined"
                   onChange={handleChange}
                 />
-              </Box>
+              <Input style={{ marginLeft: 50, marginRight: 50}} name="image" type="file"
+                onChange={(event) => {
+                  setFieldValue("image", event.target.files[0])
+                }} />
+                <CircularProgress variant="static" value={progress} />
+              
             </div>
           </Grid>
           <Grid item sm={12} md={7}>
@@ -274,22 +279,6 @@ function UploadTree(props) {
 
       
       <br />
-
-     
-
-        
-      <div style={{marginLeft: 20}}>
-      <br />
-  
-        <Input id="image" name="image" type="file"
-          onChange={(event) => {
-            setFieldValue("image", event.target.files[0])
-          }} />
-          <CircularProgress variant="static" value={progress} />
-
-          <br/>
-
-      </div>
 
       <br/>
 
