@@ -150,8 +150,7 @@ function TreeCare(props) {
                 shrink: true,
               }}
             />
-            <br />
-            <br />
+
             <TextField
               name="fert"
               label="Composted"

@@ -125,9 +125,6 @@ const treeColumns = [
   if (this.state.trees.length > 0) {
     return (
     <div style={uploadstyle}>
-        <Typography variant="h2" color="Secondary" align="center" >
-         Trees
-        </Typography>
         <DataGrid rows={this.state.trees} columns={treeColumns} autoHeight={true}/>
         
     </div>

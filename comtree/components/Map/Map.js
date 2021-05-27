@@ -67,7 +67,7 @@ class Map extends React.Component {
     navigator.geolocation.getCurrentPosition((position) => {
       console.log(position.coords)
       this.setState({
-        zoom: 12,
+        zoom: 18,
         currentLoc: {
           found: true,
           lat: position.coords.latitude,

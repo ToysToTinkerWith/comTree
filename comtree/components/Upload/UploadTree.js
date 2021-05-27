@@ -245,7 +245,7 @@ function UploadTree(props) {
             </div>
           </Grid>
           <Grid item sm={12} md={7}>
-            <div style={{ height: "50vh", width: "100%" }}>
+            <div style={{ height: "55vh", width: "100%" }}>
               <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyBiB3iNngJM_kFWKxSv9a30O3fww7YTiWA"}}
                 options={getMapOptions}
@@ -269,7 +269,7 @@ function UploadTree(props) {
                   null
                 }
 
-                <Avatar lat={values.lat} lng={values.lng} src="comtreesymbolfinal.svg" alt="tree" />
+                <Avatar lat={values.lat} lng={values.lng} src="/comtreesym.svg" alt="tree" />
 
 
               </GoogleMapReact>
@@ -277,18 +277,12 @@ function UploadTree(props) {
           </Grid>
       </Grid>
 
-      
-      <br />
-
-      <br/>
-
       <Typography className={classes.error}> {errors.name} </Typography>
       <Typography className={classes.error}> {errors.description} </Typography>
       <Typography className={classes.error}> {errors.lat} </Typography>
       <Typography className={classes.error}> {errors.image} </Typography>
       <Typography className={classes.confirm}> {confirm} </Typography>
 
-      <br/>
 
       <Button type="submit" color="secondary" variant="outlined" disabled={isSubmitting}> Upload </Button>
 
