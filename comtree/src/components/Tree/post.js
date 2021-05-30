@@ -14,12 +14,14 @@ const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(3),
     color: "red"
   },
-  image: {
+  confirm: {
     margin: theme.spacing(3),
-    width: '80%'
+    color: "green"
+  },
+  image: {
+    width: '60%'
   },
   description: {
-    margin: theme.spacing(3),
     width: '80%'
   },
   post: {
@@ -35,13 +37,16 @@ const useStyles = makeStyles((theme) => ({
 function Post(props) {
 
   const [progress, setProgress] = useState(0)
+  const [confirm, setConfirm] = useState("")
   const classes = useStyles()
 
   const handleUpload = (formData) => {
 
     console.log(formData)
 
-    const uploadTask = firebase.storage().ref("images/" + formData.image.name + "-" + props.user.uid).put(formData.image)
+    let imgId = Math.random().toString(20)
+
+    const uploadTask = firebase.storage().ref("images/" + imgId + "-" + props.user.uid).put(formData.image)
 
       uploadTask.on("state_changed", (snapshot) => {
         const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
@@ -51,7 +56,8 @@ function Post(props) {
         alert(error.message)
       },
       () => {
-        firebase.storage().ref("images").child(formData.image.name + "-" + props.user.uid).getDownloadURL().then(url => {
+        firebase.storage().ref("images").child(imgId + "-" + props.user.uid).getDownloadURL()
+        .then(url => {
           firebase.firestore().collection("publicTrees").where("psudeoId", "==", props.treeId).get()
             .then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
@@ -92,6 +98,8 @@ function Post(props) {
       if (!values.image) {
           errors.image = "Upload an image"
         }
+
+      setConfirm("")
       
 
       return errors
@@ -103,6 +111,8 @@ function Post(props) {
           handleUpload(values)
           setSubmitting(false)
           resetForm({})
+          setConfirm("Post upload success")
+
         }, 400);
       }}
     >
@@ -119,8 +129,8 @@ function Post(props) {
       <br/>
       <div>
 
-        <Grid container spacing={4}>
-          <Grid item sm={12} md={7}>
+        <Grid container >
+          <Grid item xs={12} sm={6}>
             <TextField
             label="Description"
             name="description"
@@ -131,7 +141,7 @@ function Post(props) {
             onChange={handleChange}
           />
           </Grid>
-          <Grid item sm={12} md={5}>
+          <Grid item xs={12} sm={6}>
             <Input className={classes.image} id="image" name="image" type="file"
             onChange={(event) => {
               setFieldValue("image", event.target.files[0])
@@ -143,6 +153,8 @@ function Post(props) {
       </div>      
 
       <Typography className={classes.error}> {errors.image} </Typography>
+      <Typography className={classes.confirm}> {confirm} </Typography>
+
 
 
       <Button type="submit" color="secondary" variant="outlined" disabled={isSubmitting}> Post </Button>

@@ -22,7 +22,7 @@ export default function Index() {
   const [page, setPage] = useState("")
   const [tree, setTree] = useState(null)
 
-  const admins = ["K5TMyBC5ycfPal15xDtmLuynYvJ2"]
+  const admins = ["K5TMyBC5ycfPal15xDtmLuynYvJ2", "Spu0qqpTDIMtP90iDQS957MBmOx1"]
 
   return (
     <main>
@@ -39,7 +39,7 @@ export default function Index() {
     {user ?
     admins.includes(user.uid) ?
     <Fab  color="primary" 
-    style={{position: "absolute", top: 155, right: 5}}
+    style={{position: "absolute", top: 5, right: 145}}
     onClick={() => setPage("Database")}>
     <StorageIcon />
     </Fab> 
@@ -55,10 +55,7 @@ export default function Index() {
     open={true} 
     onClose={() => setPage("")}
     style={{
-      marginTop: 50,
-      marginRight: 100,
-      marginBottom: 50,
-      marginLeft: 100,
+      marginTop: 75,
       overflowY: "auto",
       overflowX: "hidden"
     }}>
@@ -74,10 +71,7 @@ export default function Index() {
     open={true} 
     onClose={() => setPage("")}
     style={{
-      marginTop: 50,
-      marginRight: 100,
-      marginBottom: 50,
-      marginLeft: 100,
+      marginTop: 75,
       overflowY: "auto",
       overflowX: "hidden"
     }}>
@@ -93,10 +87,7 @@ export default function Index() {
     open={true} 
     onClose={() => setPage("")}
     style={{
-      marginTop: 50,
-      marginRight: 100,
-      marginBottom: 50,
-      marginLeft: 100,
+      marginTop: 75,
       overflowY: "auto",
       overflowX: "hidden"
     }}>
@@ -112,10 +103,7 @@ export default function Index() {
     open={true} 
     onClose={() => setPage("")}
     style={{
-      marginTop: 50,
-      marginRight: 100,
-      marginBottom: 50,
-      marginLeft: 100,
+      marginTop: 75,
       overflowY: "auto",
       overflowX: "hidden"
     }}>
@@ -131,10 +119,7 @@ export default function Index() {
     open={true} 
     onClose={() => setPage("")}
     style={{
-      marginTop: 50,
-      marginRight: 100,
-      marginBottom: 50,
-      marginLeft: 100,
+      marginTop: 75,
       overflowY: "auto",
       overflowX: "hidden"
     }}>
@@ -150,10 +135,7 @@ export default function Index() {
     open={true} 
     onClose={() => setPage("")}
     style={{
-      marginTop: 50,
-      marginRight: 100,
-      marginBottom: 50,
-      marginLeft: 100,
+      marginTop: 75,
       overflowY: "auto",
       overflowX: "hidden"
     }}>

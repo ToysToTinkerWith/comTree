@@ -90,10 +90,7 @@ class Profile extends React.Component {
           open={true} 
           onClose={() => this.setState({editing: false})}
           style={{
-            marginTop: 50,
-            marginRight: 100,
-            marginBottom: 50,
-            marginLeft: 100,
+            marginTop: 75,
             overflowY: "auto",
             overflowX: "hidden"
           }}>

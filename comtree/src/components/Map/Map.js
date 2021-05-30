@@ -12,7 +12,7 @@ import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 const getMapOptions = (maps) => {
 
   return {
-      streetViewControl: false,
+      streetViewControl: true,
       scaleControl: true,
       fullscreenControl: false,
       
@@ -21,7 +21,7 @@ const getMapOptions = (maps) => {
       mapTypeControl: true,
       mapTypeId: maps.MapTypeId.SATELLITE,
       mapTypeControlOptions: {
-          style: maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          style: maps.MapTypeControlStyle.DROPDOWN_MENU,
           position: maps.ControlPosition.TOP_LEFT,
           mapTypeIds: [
               maps.MapTypeId.ROADMAP,
@@ -42,10 +42,12 @@ class Map extends React.Component {
     this.state = {
       publicTrees: [],
       zoom: 4,
+      lat: 37,
+      lng: -95,
+      found: false,
       currentLoc: {
-        found: false,
-        lat: 37,
-        lng: -95
+        lat: 0,
+        lng: 0
       }
     }
     this.getUserLocation = this.getUserLocation.bind(this)
@@ -67,12 +69,15 @@ class Map extends React.Component {
     navigator.geolocation.getCurrentPosition((position) => {
       console.log(position.coords)
       this.setState({
-        zoom: 18,
+        zoom: 15,
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        found: true,
         currentLoc: {
-          found: true,
           lat: position.coords.latitude,
-          lng: position.coords.longitude,
+          lng: position.coords.longitude
         }
+        
       })
     })
   }
@@ -89,14 +94,16 @@ class Map extends React.Component {
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyBiB3iNngJM_kFWKxSv9a30O3fww7YTiWA"}}
             options={getMapOptions}
-            center={{lat: this.state.currentLoc.lat, lng: this.state.currentLoc.lng}}
-            zoom={this.state.zoom}            
-            onChange={({ zoom }) => {
+            center={{lat: this.state.lat, lng: this.state.lng}}
+            zoom={this.state.zoom}        
+            onChange={({ zoom, center }) => {
               this.setState({
-                zoom: zoom
+                zoom: zoom,
+                lat: center.lat,
+                lng: center.lng
               })
             }
-            }
+            }    
           >
 
           
@@ -105,18 +112,20 @@ class Map extends React.Component {
               return <Marker key={tree.psudeoId} width={width} user={this.props.user} lat={tree.latitude} lng={tree.longitude} setPage={this.props.setPage} setTree={this.props.setTree} tree={tree} />
             }) :  null }
 
-            {this.state.currentLoc.found ?
+            {this.state.found ? 
             <PersonPinCircleIcon lat={this.state.currentLoc.lat} lng={this.state.currentLoc.lng} style={{ width: width/2, height: width/2 }}/>
             :
             null
             }
+            
+
 
           
           
           </GoogleMapReact>
           <Fab  color="primary" 
                 tooltip="Location"
-                style={{position: "absolute", top: 85, right: 5}}
+                style={{position: "absolute", top: 5, right: 75}}
                 onClick={() => this.getUserLocation()}>
           <PersonPinCircleIcon />
           </Fab>

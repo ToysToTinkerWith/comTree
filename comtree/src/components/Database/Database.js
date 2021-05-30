@@ -79,36 +79,38 @@ componentDidMount = () => {
 render() {
 
 const treeColumns = [
-    { 
-    field: 'created', 
-    headerName: 'Created', 
-    width: 150,
-    type: "date"
-    
-    },
-    { 
-    field: 'name', 
-    headerName: 'Tree Name', 
+  { 
+    field: 'flag', 
+    headerName: 'Flag', 
     width: 180,
-    renderCell: (params) => (
-          
-        <Button
-        variant="contained"
-        color="Secondary"
-        size="small"
-        style={{ padding: 10 }}
-        onClick={() => [this.props.setTree(params.row), this.props.setPage("Tree")]}
-      >
-        {params.row.name} 
-        </Button>
-    ),
-    },
-    { 
-      field: 'flag', 
-      headerName: 'Flag', 
-      width: "100%",
-      
-      },
+    
+  },
+  { 
+  field: 'name', 
+  headerName: 'Tree Name', 
+  width: 180,
+  renderCell: (params) => (
+        
+      <Button
+      variant="contained"
+      color="Secondary"
+      size="small"
+      style={{ padding: 10 }}
+      onClick={() => [this.props.setTree(params.row), this.props.setPage("Tree")]}
+    >
+      {params.row.name} 
+      </Button>
+  ),
+  },
+  
+  { 
+  field: 'created', 
+  headerName: 'Created', 
+  width: 150,
+  type: "date"
+  
+  }
+
 
 ]
 

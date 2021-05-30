@@ -42,7 +42,7 @@ class Tree extends React.Component {
 
           firebase.firestore().collection("publicTrees").doc(thisId).collection("posts")
           .orderBy("timestamp", "desc")
-          .get().then((querySnapshot) => {
+          .onSnapshot(querySnapshot => {
 
             let incomingPosts = []
             let incomingIds = []
@@ -98,6 +98,7 @@ class Tree extends React.Component {
       boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
       paddingLeft: "10px",
       paddingRight: "10px",
+      paddingTop: "10px",
       textAlign: "center"
       }
 
@@ -170,14 +171,11 @@ class Tree extends React.Component {
                 open={true} 
                 onClose={() => this.setState({status: "none"})}
                 style={{
-                  marginTop: 50,
-                  marginRight: 100,
-                  marginBottom: 50,
-                  marginLeft: 100,
+                  marginTop: 75,
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
-                <Post treeId={this.props.psudeoId} user={this.props.user} />
+                <Post treeId={this.props.tree.psudeoId} user={this.props.user} />
                 </Modal> 
                 : 
                 null}
@@ -187,10 +185,7 @@ class Tree extends React.Component {
                 open={true} 
                 onClose={() => this.setState({status: "none"})}
                 style={{
-                  marginTop: 50,
-                  marginRight: 100,
-                  marginBottom: 50,
-                  marginLeft: 100,
+                  marginTop: 75,
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
@@ -204,10 +199,7 @@ class Tree extends React.Component {
                 open={true} 
                 onClose={() => this.setState({status: "none"})}
                 style={{
-                  marginTop: 50,
-                  marginRight: 100,
-                  marginBottom: 50,
-                  marginLeft: 100,
+                  marginTop: 75,
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
@@ -221,10 +213,7 @@ class Tree extends React.Component {
                 open={true} 
                 onClose={() => this.setState({status: "none"})}
                 style={{
-                  marginTop: 50,
-                  marginRight: 100,
-                  marginBottom: 50,
-                  marginLeft: 100,
+                  marginTop: 75,
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
@@ -252,10 +241,7 @@ class Tree extends React.Component {
                 open={true} 
                 onClose={() => this.setState({post: null, postId: null})}
                 style={{
-                  marginTop: 50,
-                  marginRight: 100,
-                  marginBottom: 50,
-                  marginLeft: 100,
+                  marginTop: 75,
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
@@ -300,10 +286,7 @@ class Tree extends React.Component {
                 open={true} 
                 onClose={() => this.setState({post: null, postId: null})}
                 style={{
-                  marginTop: 50,
-                  marginRight: 100,
-                  marginBottom: 50,
-                  marginLeft: 100,
+                  marginTop: 75,
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>

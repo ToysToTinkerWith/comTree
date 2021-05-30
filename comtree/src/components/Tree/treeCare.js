@@ -12,7 +12,8 @@ import UploadMarker from "../Upload/UploadMarker"
 const getMapOptions = (maps) => {
 
   return {
-      streetViewControl: false,
+      streetViewControl: true,
+      scrollwheel: false,
       scaleControl: true,
       fullscreenControl: false,
       disableDoubleClickZoom: true,
@@ -21,7 +22,7 @@ const getMapOptions = (maps) => {
       mapTypeControl: true,
       mapTypeId: maps.MapTypeId.SATELLITE,
       mapTypeControlOptions: {
-          style: maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          style: maps.MapTypeControlStyle.DROPDOWN_MENU,
           position: maps.ControlPosition.TOP_LEFT,
           mapTypeIds: [
               maps.MapTypeId.ROADMAP,
@@ -138,7 +139,7 @@ function TreeCare(props) {
       <div>
 
         <Grid container spacing={4}>
-          <Grid item sm={12} md={5}>
+          <Grid item sm={12} md={6}>
             <TextField
               name="watered"
               label="Watered"
@@ -192,7 +193,7 @@ function TreeCare(props) {
             </div>
 
           </Grid>
-          <Grid item sm={12} md={7}>
+          <Grid item sm={12} md={6}>
           
            <TextField
               name="wiki"
@@ -208,7 +209,7 @@ function TreeCare(props) {
             <iframe
               title="Wiki"
               width="100%"
-              height="640px"
+              height="515vh"
               allow="fullscreen"
               src={props.tree.wiki}>
           </iframe>

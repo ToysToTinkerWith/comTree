@@ -20,19 +20,19 @@ const useStyles = makeStyles((theme) => ({
     color: "red"
   },
   name: {
-    width: '70%'
+    width: '60%',
+    margin: 25
   },
   description: {
     width: '90%',
-    marginTop: 50,
-    marginBottom: 50
-  }
+    }
 }))
 
 const getMapOptions = (maps) => {
 
   return {
       streetViewControl: false,
+      scrollwheel:false,
       scaleControl: true,
       fullscreenControl: false,
       disableDoubleClickZoom: true,
@@ -41,7 +41,7 @@ const getMapOptions = (maps) => {
       mapTypeControl: true,
       mapTypeId: maps.MapTypeId.SATELLITE,
       mapTypeControlOptions: {
-          style: maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          style: maps.MapTypeControlStyle.DROPWDOWN_MENU,
           position: maps.ControlPosition.TOP_LEFT,
           mapTypeIds: [
               maps.MapTypeId.ROADMAP,
@@ -217,8 +217,8 @@ function UploadTree(props) {
       <Form onSubmit={handleSubmit} autoComplete="off" >
       <br/>
 
-      <Grid container spacing={4}>
-          <Grid item sm={12} md={5}>
+      <Grid container >
+          <Grid item xs={12} sm={6}>
             <div>
                 <TextField
                   label="Tree Name"
@@ -236,7 +236,7 @@ function UploadTree(props) {
                   variant="outlined"
                   onChange={handleChange}
                 />
-              <Input style={{ marginLeft: 50, marginRight: 50}} name="image" type="file"
+              <Input style={{ margin: 25, width: "50%"}} name="image" type="file"
                 onChange={(event) => {
                   setFieldValue("image", event.target.files[0])
                 }} />
@@ -244,8 +244,8 @@ function UploadTree(props) {
               
             </div>
           </Grid>
-          <Grid item sm={12} md={7}>
-            <div style={{ height: "55vh", width: "100%" }}>
+          <Grid item xs={12} sm={6}>
+            <div style={{ height: "50vh", width: "100%" }}>
               <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyBiB3iNngJM_kFWKxSv9a30O3fww7YTiWA"}}
                 options={getMapOptions}
@@ -276,6 +276,7 @@ function UploadTree(props) {
             </div>
           </Grid>
       </Grid>
+      <br />
 
       <Typography className={classes.error}> {errors.name} </Typography>
       <Typography className={classes.error}> {errors.description} </Typography>

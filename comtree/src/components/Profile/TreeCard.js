@@ -45,10 +45,11 @@ class PublicTreeCard extends React.Component {
   render() {
 
     const treestyle = {
-      width: "225px",
+      width: "150px",
       backgroundColor: "#FFFFF0",
       borderRadius: "15px",
-      boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)"
+      boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
+      textAlign: "center"
       }
 
         if(this.state.tree) {
@@ -56,16 +57,16 @@ class PublicTreeCard extends React.Component {
             return (
               <div style={treestyle}>
 
-                <Typography variant="h5" align="center" color="secondary"> {this.state.tree.name} </Typography>
+                <Typography variant="overline" align="center" color="secondary"> {this.state.tree.name} </Typography>
+                <br/>
 
-                <IconButton onClick={() => 
+                <IconButton 
+                  onClick={() => 
                     {this.props.setTree(this.state.tree)
                     this.props.setPage("Tree")}
-                  } >
-                  <Avatar src={this.state.tree.imageUrl}  alt=""  style={{ 
-                    height: '200px', 
-                    width: '200px'
-                     }} />
+                  }
+                  >
+                  <Avatar src={this.state.tree.imageUrl}  alt="" style={{ width: "100px", height: "100px" }} />
                 </IconButton>
 
                 <br />

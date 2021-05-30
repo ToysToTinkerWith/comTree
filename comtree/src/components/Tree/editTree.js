@@ -19,8 +19,6 @@ const useStyles = makeStyles((theme) => ({
         backgroundColor: "#FFFFF0",
         borderRadius: "15px",
         boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-        paddingLeft: "10px",
-        paddingRight: "10px",
         textAlign: "center"
     }
 }))
@@ -29,6 +27,7 @@ const getMapOptions = (maps) => {
 
     return {
         streetViewControl: false,
+        scrollwheel: false,
         scaleControl: true,
         fullscreenControl: false,
         disableDoubleClickZoom: true,
@@ -37,7 +36,7 @@ const getMapOptions = (maps) => {
         mapTypeControl: true,
         mapTypeId: maps.MapTypeId.SATELLITE,
         mapTypeControlOptions: {
-            style: maps.MapTypeControlStyle.HORIZONTAL_BAR,
+            style: maps.MapTypeControlStyle.DROPDOWN_MENU,
             position: maps.ControlPosition.TOP_LEFT,
             mapTypeIds: [
                 maps.MapTypeId.ROADMAP,
@@ -66,6 +65,19 @@ export default function EditTree(props) {
         else if (formData.flag === "delete post") {
           firebase.firestore().collection("publicTrees").doc(props.treeId)
           .collection("posts").doc(formData.postId).delete()
+        }
+
+        else if (formData.flag === "change picture") {
+          firebase.firestore().collection("publicTrees").doc(props.treeId)
+          .collection("posts").doc(formData.postId).get()
+          .then(doc => {
+
+            let postImg = doc.data().imageUrl
+
+            firebase.firestore().collection("publicTrees").doc(props.treeId).update({
+              imageUrl: postImg
+            })
+          })
         }
 
         else {
@@ -122,8 +134,8 @@ export default function EditTree(props) {
       <br/>
       <div>
 
-        <Grid container spacing={4}>
-          <Grid item sm={12} md={5}>
+        <Grid container>
+          <Grid item xs={12} sm={5}>
               <TextField
                 label="Name"
                 name="name"
@@ -150,8 +162,8 @@ export default function EditTree(props) {
                 />   
             
           </Grid>
-          <Grid item sm={12} md={7}>
-          <div style={{ height: "50vh", width: "100%" }}>
+          <Grid item xs={12} sm={7}>
+            <div style={{ height: "50vh", width: "100%" }}>
               <GoogleMapReact
                 bootstrapURLKeys={{ key: "AIzaSyBiB3iNngJM_kFWKxSv9a30O3fww7YTiWA"}}
                 options={getMapOptions}
