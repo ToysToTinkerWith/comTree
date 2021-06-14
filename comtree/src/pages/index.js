@@ -75,7 +75,7 @@ export default function Index() {
       overflowY: "auto",
       overflowX: "hidden"
     }}>
-    <UploadTree user={user}/>
+    <UploadTree user={user} setPage={setPage} />
     </Modal>
     
     :

@@ -24,7 +24,7 @@ class Tree extends React.Component {
       postIds: [],
       post: null,
       postId: null,
-      status: "none"
+      status: ""
     }
 
     this.hugTree = this.hugTree.bind(this)
@@ -169,13 +169,13 @@ class Tree extends React.Component {
                 {this.state.status === "post" ?
                 <Modal 
                 open={true} 
-                onClose={() => this.setState({status: "none"})}
+                onClose={() => this.setState({status: ""})}
                 style={{
                   marginTop: 75,
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
-                <Post treeId={this.props.tree.psudeoId} user={this.props.user} />
+                <Post treeId={this.props.tree.psudeoId} user={this.props.user} setStatus={() => this.setState({status: ""})}/>
                 </Modal> 
                 : 
                 null}
@@ -183,7 +183,7 @@ class Tree extends React.Component {
                 {this.state.status === "tree" ?
                 <Modal 
                 open={true} 
-                onClose={() => this.setState({status: "none"})}
+                onClose={() => this.setState({status: ""})}
                 style={{
                   marginTop: 75,
                   overflowY: "auto",
@@ -197,7 +197,7 @@ class Tree extends React.Component {
                 {this.state.status === "edit" ?
                 <Modal 
                 open={true} 
-                onClose={() => this.setState({status: "none"})}
+                onClose={() => this.setState({status: ""})}
                 style={{
                   marginTop: 75,
                   overflowY: "auto",
@@ -211,7 +211,7 @@ class Tree extends React.Component {
                 {this.state.status === "flag" ?
                 <Modal 
                 open={true} 
-                onClose={() => this.setState({status: "none"})}
+                onClose={() => this.setState({status: ""})}
                 style={{
                   marginTop: 75,
                   overflowY: "auto",

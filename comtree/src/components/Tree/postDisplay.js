@@ -76,9 +76,9 @@ class PostDisplay extends React.Component {
           
           <Typography variant="h5" color="secondary" > {this.props.post.description} </Typography>
           <img src={this.props.post.imageUrl} style={{ borderRadius: "15px", marginTop: 10 }} alt="" width="100%" /> 
-          <Typography variant="h5" color="secondary"> Posted By: {this.props.post.postedBy} </Typography>
+          <Typography variant="h6" color="secondary"> Posted By: {this.props.post.postedBy} </Typography>
           {this.props.post.timestamp ? 
-          <Typography align="right" variant="h5" color="secondary"> {this.props.post.timestamp.toDate().toLocaleDateString()} </Typography> :
+          <Typography align="right" variant="h6" color="secondary"> {this.props.post.timestamp.toDate().toLocaleDateString()} </Typography> :
           null
           }
         </div>

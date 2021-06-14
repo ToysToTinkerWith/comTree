@@ -56,11 +56,15 @@ function Post(props) {
         alert(error.message)
       },
       () => {
+        setConfirm("Post upload success")
+
         firebase.storage().ref("images").child(imgId + "-" + props.user.uid).getDownloadURL()
         .then(url => {
           firebase.firestore().collection("publicTrees").where("psudeoId", "==", props.treeId).get()
             .then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
+
+                props.setStatus()
 
                 firebase.firestore().collection("publicTrees").doc(doc.id).update({
                   imageUrl: url,
@@ -76,6 +80,7 @@ function Post(props) {
                 )
 
               })
+              
             })
         })
       })
@@ -108,10 +113,10 @@ function Post(props) {
 
       onSubmit = {(values, { setSubmitting, resetForm }) => {
         setTimeout(() => {
+          setConfirm("Uploading...")
           handleUpload(values)
           setSubmitting(false)
           resetForm({})
-          setConfirm("Post upload success")
 
         }, 400);
       }}
@@ -146,13 +151,13 @@ function Post(props) {
             onChange={(event) => {
               setFieldValue("image", event.target.files[0])
             }} />
-            <CircularProgress variant="determinate" value={progress} />
           </Grid>
         </Grid>
         
       </div>      
 
       <Typography className={classes.error}> {errors.image} </Typography>
+      <CircularProgress color="secondary" variant="determinate" value={progress} />
       <Typography className={classes.confirm}> {confirm} </Typography>
 
 
