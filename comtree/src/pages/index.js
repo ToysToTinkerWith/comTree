@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import Head from 'next/head'
 import { useAuth } from "../components/firebase/firebaseAuth"
 
+import firebase from "firebase/app"
+import "firebase/firestore"
+import firebaseInit from "../components/firebase/firebaseInit";
+
 import Nav from "../components/Nav"
 import Map from "../components/Map/Map"
 import Auth from "../components/Auth/Auth"
@@ -15,7 +19,7 @@ import { Modal, Fab } from "@material-ui/core"
 import StorageIcon from '@material-ui/icons/Storage';
 
 
-export default function Index() {
+export default function Index({ trees }) {
 
   const { user } = useAuth()
 
@@ -34,7 +38,7 @@ export default function Index() {
     
     <Nav user={user} setPage={setPage} />
 
-    <Map user={user} setPage={setPage} setTree={setTree} />
+    <Map trees={trees} user={user} setPage={setPage} setTree={setTree} />
 
     {user ?
     admins.includes(user.uid) ?
@@ -107,7 +111,7 @@ export default function Index() {
       overflowY: "auto",
       overflowX: "hidden"
     }}>
-    <Mission />
+    <Mission user={user}/>
     </Modal>
     
     :
@@ -146,10 +150,32 @@ export default function Index() {
     null
     }
 
-
-
   </main>
   )
+  }
+
+  export async function getServerSideProps() {
+    firebaseInit();
+    // Fetch data from external API
+    
+    let trees = await new Promise((resolve, reject) => {
+      firebase.firestore().collection("publicTrees").get().then(snapshot => {
+        let trees = []
+        snapshot.forEach(doc => {
+          trees.push(doc.data().name)
+          resolve(trees)
+        })
+
+  
+        trees = snapshot.docs.map(doc => doc.data())
+  
+    })
+    }).catch(error =>{
+      reject([])
+    })
+  
+    // Pass data to the page via props
+    return { props: { trees } }
   }
 
  
