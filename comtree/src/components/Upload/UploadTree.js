@@ -84,6 +84,7 @@ function UploadTree(props) {
       },
       () => {
 
+        setConfirm("Tree upload success")
         let generatedId = Math.random().toString(36)
 
         firebase.storage().ref("images").child(imgId + "-" + props.user.uid).getDownloadURL().then(url => {
@@ -105,6 +106,8 @@ function UploadTree(props) {
             .then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
               console.log(doc.id, " => ", doc.data())
+              
+              props.setPage("")
 
                 firebase.firestore().collection("publicTrees").doc(doc.id).collection("posts").add({
                   postedBy: props.user.displayName,
@@ -116,6 +119,7 @@ function UploadTree(props) {
 
               })
             })
+            
           )
         })
       })
@@ -196,10 +200,10 @@ function UploadTree(props) {
 
       onSubmit = {(values, { setSubmitting, resetForm }) => {
         setTimeout(() => {
+          setConfirm("Uploading...")
           handleUpload(values)
           setSubmitting(false)
           resetForm({})
-          setConfirm("Tree upload success")
 
         }, 400);
       }}
@@ -240,7 +244,6 @@ function UploadTree(props) {
                 onChange={(event) => {
                   setFieldValue("image", event.target.files[0])
                 }} />
-                <CircularProgress variant="static" value={progress} />
               
             </div>
           </Grid>
@@ -282,7 +285,9 @@ function UploadTree(props) {
       <Typography className={classes.error}> {errors.description} </Typography>
       <Typography className={classes.error}> {errors.lat} </Typography>
       <Typography className={classes.error}> {errors.image} </Typography>
+      <CircularProgress color="secondary" variant="determinate" value={progress} />
       <Typography className={classes.confirm}> {confirm} </Typography>
+
 
 
       <Button type="submit" color="secondary" variant="outlined" disabled={isSubmitting}> Upload </Button>
