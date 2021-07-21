@@ -6,7 +6,6 @@ import "firebase/firestore"
 import GoogleMapReact from 'google-map-react'
 import Marker from "./Marker"
 import { Fab } from "@material-ui/core"
-
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 
 const getMapOptions = (maps) => {
@@ -40,7 +39,8 @@ class Map extends React.Component {
    constructor() {
     super()
     this.state = {
-      publicTrees: [],
+      trees: [],
+      treeIds: [],
       zoom: 4,
       lat: 37,
       lng: -95,
@@ -53,12 +53,14 @@ class Map extends React.Component {
     this.getUserLocation = this.getUserLocation.bind(this)
   }
 
-
   componentDidMount() {
     firebase.firestore().collection("publicTrees").onSnapshot(snapshot => {
 
-      this.setState({
-        publicTrees: snapshot.docs.map(doc => doc.data())
+      snapshot.forEach(doc => {
+        this.setState(prevState => ({
+          trees: [...prevState.trees, doc.data()],
+          treeIds: [...prevState.treeIds, doc.id]
+        }))
       })
 
     })
@@ -67,7 +69,6 @@ class Map extends React.Component {
 
   getUserLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position.coords)
       this.setState({
         zoom: 15,
         lat: position.coords.latitude,
@@ -85,8 +86,7 @@ class Map extends React.Component {
 
   render() {
 
-    var displayTrees = this.state.publicTrees
-    var width = this.state.zoom * 4
+    var width = this.state.zoom * 2
 
     return (
       <div>
@@ -106,10 +106,8 @@ class Map extends React.Component {
             }    
           >
 
-          
-
-            {displayTrees.length > 0 ? displayTrees.map(tree => {
-              return <Marker key={tree.psudeoId} width={width} user={this.props.user} lat={tree.latitude} lng={tree.longitude} setPage={this.props.setPage} setTree={this.props.setTree} tree={tree} />
+            {this.state.trees.length > 0 ? this.state.trees.map((tree, index) => {
+              return <Marker key={index} width={width} user={this.props.user} zoom={this.state.zoom} treeImg={tree.imageUrl}lat={tree.latitude} lng={tree.longitude} setPage={this.props.setPage} setTree={this.props.setTree} tree={tree} treeId={this.state.treeIds[index]}/>
             }) :  null }
 
             {this.state.found ? 
@@ -117,10 +115,6 @@ class Map extends React.Component {
             :
             null
             }
-            
-
-
-          
           
           </GoogleMapReact>
           <Fab  color="primary" 

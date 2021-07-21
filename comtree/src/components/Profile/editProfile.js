@@ -4,24 +4,34 @@ import "firebase/firestore"
 import "firebase/storage"
 
 import { Formik, Form } from 'formik';
-import { Button, TextField, Input, CircularProgress, makeStyles } from '@material-ui/core'
+import { Button, Typography, TextField, Input, CircularProgress, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   
   root: {
-      margin: theme.spacing(1),
+      margin: theme.spacing(3),
       width: "90%"
-  }
+  },
+  confirm: {
+    color: "green"
+  },
+  error: {
+    color: "red"
+  },
 }))
  
 function EditProfile(props) {
 
   const [progress, setProgress] = useState(0)
+  const [confirm, setConfirm] = useState("")
+
   const classes = useStyles()
 
   const handleUpload = (formData) => {
 
     if (formData.image) {
+      setConfirm("Uploading...")
+
       const uploadTask = firebase.storage().ref("images/" + formData.image.name + "-" + props.user.uid).put(formData.image)
 
       uploadTask.on("state_changed", (snapshot) => {
@@ -32,6 +42,7 @@ function EditProfile(props) {
         alert(error.message)
       },
       () => {
+        setConfirm("Update success")
         firebase.storage().ref("images").child(formData.image.name + "-" + props.user.uid).getDownloadURL().then(url => {
           firebase.firestore().collection("profiles").where("uid", "==", props.user.uid)
           .get()
@@ -93,6 +104,12 @@ function EditProfile(props) {
     validate = {values => {
         const errors = {}
 
+        if (!values.bio && !values.image) {
+          errors.bio = "Change one of the fields to update"
+        }
+
+        setConfirm("")
+
       return errors
     }}
 
@@ -133,13 +150,13 @@ function EditProfile(props) {
           onChange={(event) => {
             setFieldValue("image", event.target.files[0]);
           }} />
-          <CircularProgress variant="static" value={progress} />
 
-          <br/>
-          <br/>
 
       </div>
-
+      <Typography className={classes.error}> {errors.bio} </Typography>
+      <Typography className={classes.confirm}> {confirm} </Typography>
+      <CircularProgress color="secondary" variant="determinate" value={progress} />
+      <br />
 
       <Button type="submit" color="secondary" variant="outlined" disabled={isSubmitting}> Update </Button>
       <br />

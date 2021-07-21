@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import nookies from "nookies";
-import firebaseInit from "./firebaseInit";
+import FirebaseInit from "./FirebaseInit";
 import firebase from "firebase/app";
 import "firebase/auth";
+
 const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
-  firebaseInit();
+  FirebaseInit();
   const [user, setUser] = useState(null);
 
   useEffect(() => {

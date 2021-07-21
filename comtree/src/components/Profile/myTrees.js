@@ -8,7 +8,8 @@ class MyTrees extends React.Component {
   constructor() {
     super()
     this.state = {
-      myTrees: []
+      myTrees: [],
+      myTreeIds: []
     }
   }
 
@@ -17,11 +18,14 @@ class MyTrees extends React.Component {
     .get()
     .then((querySnapshot) => {
         let myTrees = []
+        let myTreeIds = []
         querySnapshot.forEach((doc) => {
             myTrees.push(doc.data())
+            myTreeIds.push(doc.id)
         })
         this.setState({
-              myTrees: myTrees
+              myTrees: myTrees,
+              myTreeIds: myTreeIds
             })
 
     })
@@ -32,15 +36,13 @@ class MyTrees extends React.Component {
 
 
   render() {
-
-    let myTrees = this.state.myTrees
-
+    
        return (
       <div>
-        {myTrees.length > 0 ? myTrees.map(tree => {
+        {this.state.myTrees.length > 0 ? this.state.myTrees.map((tree, index) => {
           return (
             <div style={{display: "inline-block", paddingRight: 10, paddingBottom: 10 }} key={tree.psudeoId}>
-            <TreeCard user={this.props.user} psudeoId={tree.psudeoId} setPage={this.props.setPage} setTree={this.props.setTree} />          
+            <TreeCard user={this.props.user} treeId={this.state.myTreeIds[index]} setPage={this.props.setPage} setTree={this.props.setTree} />          
 
           </div>
           )

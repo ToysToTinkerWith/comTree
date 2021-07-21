@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     }
   }))
 
-export default function Mission() {
+export default function Mission(props) {
 
     const classes = useStyles()
     const [confirm, setConfirm] = useState("")
@@ -30,7 +30,8 @@ export default function Mission() {
 
         firebase.firestore().collection("feedback").add({
                 timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                username: props.username,
+                username: props.user.displayName,
+                uid: props.user.uid,
                 message: formData.message
               })
         
@@ -347,6 +348,7 @@ export default function Mission() {
                     onChange={handleChange}
                 />
                 </Box>
+                <br />
 
                 <Typography className={classes.error} > {errors.message} </Typography>
                 <Typography className={classes.confirm} > {confirm} </Typography>

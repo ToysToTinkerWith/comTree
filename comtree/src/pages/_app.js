@@ -1,7 +1,6 @@
 
 import React from "react";
-import Head from "next/head";
-import { AuthProvider } from "../components/firebase/firebaseAuth";
+import { AuthProvider } from "../components/Firebase/FirebaseAuth";
 
 import PropTypes from "prop-types";
 import { ThemeProvider } from "@material-ui/core/styles";

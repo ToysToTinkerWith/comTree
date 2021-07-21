@@ -4,7 +4,7 @@ import firebase from "firebase/app"
 import "firebase/firestore"
 
 import { DataGrid } from '@material-ui/data-grid'
-import { Button, Typography } from '@material-ui/core/'
+import { Button } from '@material-ui/core/'
 
 
 
@@ -96,7 +96,7 @@ const treeColumns = [
       color="Secondary"
       size="small"
       style={{ padding: 10 }}
-      onClick={() => [this.props.setTree(params.row), this.props.setPage("Tree")]}
+      onClick={() => [this.props.setTree(params.row.id), this.props.setPage("Tree")]}
     >
       {params.row.name} 
       </Button>

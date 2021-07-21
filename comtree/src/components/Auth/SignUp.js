@@ -5,13 +5,13 @@ import "firebase/firestore"
 import "firebase/auth"
 
 import { Formik, Field, Form } from 'formik';
-import { Button, Box, makeStyles } from '@material-ui/core'
-import { TextField } from 'formik-material-ui';
+import { Button, Box, TextField, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
   
   root: {
-    width: "80%"
+    width: "80%",
+    margin: 15
   }
 
 }))
@@ -119,42 +119,35 @@ function SignUp(props) {
       }) => (
       <Form onSubmit={handleSubmit} autoComplete="off">
       <br />
-        <Box margin={5}>
-          <Field
-            component={TextField}
+          <TextField
             className={classes.root}
             type="text"
             label="Display Name"
             name="displayName"
+            onChange={handleChange}
           />
-        </Box>
-        <Box margin={5}>
-          <Field
-            component={TextField}
+          <TextField
             className={classes.root}
             type="email"
             label="Email"
             name="email"
+            onChange={handleChange}
           />
-        </Box>
-        <Box margin={5}>
-          <Field
-            component={TextField}
+          <TextField
             className={classes.root}
             type="password"
             label="Password"
             name="password"
+            onChange={handleChange}
           />
-        </Box>
-        <Box margin={5}>
-          <Field
-            component={TextField}
+          <TextField
             className={classes.root}
             type="password"
             label="Confirm Password"
             name="confPassword"
+            onChange={handleChange}
           />
-        </Box>
+        <br />
         <br />
         <Button type="submit" color="secondary" variant="outlined" disabled={isSubmitting}> Sign Up </Button>
         <br />

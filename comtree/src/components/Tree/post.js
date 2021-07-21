@@ -22,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
     width: '60%'
   },
   description: {
-    width: '80%'
+    width: '80%',
+    marginBottom: 40
   },
   post: {
     backgroundColor: "#FFFFF0",
@@ -57,33 +58,24 @@ function Post(props) {
       },
       () => {
         setConfirm("Post upload success")
-
         firebase.storage().ref("images").child(imgId + "-" + props.user.uid).getDownloadURL()
         .then(url => {
-          firebase.firestore().collection("publicTrees").where("psudeoId", "==", props.treeId).get()
-            .then(function(querySnapshot) {
-              querySnapshot.forEach(function(doc) {
+          firebase.firestore().collection("publicTrees").doc(props.treeId).update({
+            imageUrl: url,
+          }).then(
+            firebase.firestore().collection("publicTrees").doc(props.treeId).collection("posts").add({
+            psudeoId: Math.random().toString(36),
+            postedBy: props.user.displayName,
+            postedbyId: props.user.uid,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            imageUrl: url,
+            description: formData.description
+          })
+          )
+          props.setStatus("")
 
-                props.setStatus()
-
-                firebase.firestore().collection("publicTrees").doc(doc.id).update({
-                  imageUrl: url,
-                }).then(
-                  firebase.firestore().collection("publicTrees").doc(doc.id).collection("posts").add({
-                  psudeoId: Math.random().toString(36),
-                  postedBy: props.user.displayName,
-                  postedbyId: props.user.uid,
-                  timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                  imageUrl: url,
-                  description: formData.description
-                })
-                )
-
-              })
-              
-            })
+          })
         })
-      })
 
   }
 

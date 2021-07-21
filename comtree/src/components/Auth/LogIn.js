@@ -4,14 +4,14 @@ import firebase from "firebase/app"
 import "firebase/auth"
 
 import { Formik, Field, Form } from 'formik';
-import { Button, Box, makeStyles } from '@material-ui/core'
-import { TextField } from 'formik-material-ui';
+import { Button, Box, TextField, makeStyles } from '@material-ui/core'
 
 
 const useStyles = makeStyles((theme) => ({
   
   root: {
-    width: "80%"
+    width: "80%",
+    margin: 15
   }
 
 }))
@@ -23,6 +23,8 @@ function LogIn(props) {
 
 
   const logIn = (formData) => {
+
+    console.log(formData)
 
     firebase.auth().signInWithEmailAndPassword(formData.email, formData.password)
     .then(props.setPage("Map"))
@@ -81,25 +83,22 @@ function LogIn(props) {
       
       <Form onSubmit={handleSubmit}>
       <br/>
-        <Box margin={5}>
-          <Field
-            component={TextField}
+          <TextField
             className={classes.root}
             type="email"
             label="Email"
             name="email"
+            onChange={handleChange}
           />
-        </Box>
         {errors.email && touched.email}
-        <Box margin={5}>
-          <Field
-            component={TextField}
+          <TextField
             className={classes.root}
             type="password"
             label="Password"
             name="password"
+            onChange={handleChange}
           />
-        </Box>
+        <br />
         <br />
         {errors.password && touched.password}
         <Button type="submit" color="secondary" variant="outlined" disabled={isSubmitting}> Log In </Button>

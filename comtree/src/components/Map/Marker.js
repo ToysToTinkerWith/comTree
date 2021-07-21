@@ -12,6 +12,7 @@ function Marker(props) {
       if (props.tree.huggedBy.includes(props.user.uid)) {
         adoptstyle = {
           border: "2px solid blue",
+          backgroundColor: "light-blue",
           width: props.width,
           height: props.width
         }
@@ -53,17 +54,27 @@ function Marker(props) {
     }
 
     else {
-      return (
-        <div>
-          <IconButton onClick={() => [props.setTree(props.tree), props.setPage("Tree")]} >
-            <Avatar src={props.tree.imageUrl} style={adoptstyle}/>
-          </IconButton>
-        </div>
-    )
+      if (props.zoom < 18) {
+        return (
+          <div>
+            <IconButton onClick={() => [props.setTree(props.treeId), props.setPage("Tree")]} >
+              <Avatar src="/comtreesym.svg" style={adoptstyle}/>
+            </IconButton>
+          </div>
+      )
+      }
+      else {
+        return (
+          <div>
+            <IconButton onClick={() => [props.setTree(props.treeId), props.setPage("Tree")]} >
+              <Avatar src={props.treeImg} style={adoptstyle}/>
+            </IconButton>
+          </div>
+      )
+      }
+      
     }
 
-      
-    
   }
 
 

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react"
-import { GetServerSideProps } from "next";
+import React, { useState } from "react"
 import { loadStripe } from "@stripe/stripe-js";
 import Stripe from "stripe";
 import { createCheckoutSession } from "next-stripe/client";

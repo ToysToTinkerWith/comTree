@@ -4,12 +4,11 @@ import "firebase/firestore"
 import "firebase/storage"
 
 import GoogleMapReact from 'google-map-react';
-import UploadMarker from "./UploadMarker"
 
 import PersonPinCircleIcon from '@material-ui/icons/PersonPinCircle';
 
 import { Formik, Form } from 'formik';
-import { Button, Typography, Avatar, TextField, Input, CircularProgress, Box, Grid, makeStyles } from '@material-ui/core'
+import { Button, Typography, Avatar, TextField, Input, CircularProgress, Grid, makeStyles } from '@material-ui/core'
 
 const useStyles = makeStyles((theme) => ({
 
@@ -58,7 +57,6 @@ const getMapOptions = (maps) => {
 function UploadTree(props) {
 
   const [progress, setProgress] = useState(0)
-  const [displayTrees, setDisplayTrees] = useState([])
   const [confirm, setConfirm] = useState("")
   const [lat, setLat] = useState(37)
   const [lng, setLng] = useState(-95)
@@ -101,35 +99,24 @@ function UploadTree(props) {
             weeded: null,
             wiki: null,
             flag: ""
-          }).then(
-            firebase.firestore().collection("publicTrees").where("psudeoId", "==", generatedId).get()
-            .then(function(querySnapshot) {
-              querySnapshot.forEach(function(doc) {
-              console.log(doc.id, " => ", doc.data())
+          }).then(doc => {
+            firebase.firestore().collection("publicTrees").doc(doc.id).collection("posts").add({
+              postedBy: props.user.displayName,
+              postedbyId: props.user.uid,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+              imageUrl: url,
+              description: formData.description
+            })
               
               props.setPage("")
-
-                firebase.firestore().collection("publicTrees").doc(doc.id).collection("posts").add({
-                  postedBy: props.user.displayName,
-                  postedbyId: props.user.uid,
-                  timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                  imageUrl: url,
-                  description: formData.description
-                })
-
-              })
-            })
             
-          )
+          })
         })
       })
 
   }
 
   useEffect(() => {
-
-  const unsubscribe = firebase.firestore().collection("publicTrees").onSnapshot(snapshot => {
-        setDisplayTrees(snapshot.docs.map(doc => doc.data()))
 
         navigator.geolocation.getCurrentPosition((position) => {
           setLat(position.coords.latitude)
@@ -139,11 +126,6 @@ function UploadTree(props) {
         
       })
 
-    })
-
-    return () => {
-      unsubscribe()
-    }
 
   }, [])
 
@@ -262,10 +244,6 @@ function UploadTree(props) {
                 }}
               >
 
-                {displayTrees.length > 0 ? displayTrees.map(tree => {
-                  return <UploadMarker key={tree.psudeoId} lat={tree.latitude} lng={tree.longitude} imageUrl={tree.imageUrl} />
-                }) :  null }
-
                 {found ? 
                   <PersonPinCircleIcon lat={lat} lng={lng} style={{ width: 25, height: 25 }} /> 
                   :
@@ -288,7 +266,7 @@ function UploadTree(props) {
       <CircularProgress color="secondary" variant="determinate" value={progress} />
       <Typography className={classes.confirm}> {confirm} </Typography>
 
-
+      <br />
 
       <Button type="submit" color="secondary" variant="outlined" disabled={isSubmitting}> Upload </Button>
 

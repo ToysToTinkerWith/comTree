@@ -1,7 +1,7 @@
 import React from "react"
 import firebase from "firebase/app"
 
-import { Typography } from "@material-ui/core"
+import { Typography, Avatar } from "@material-ui/core"
 
 class PostDisplay extends React.Component {
 
@@ -17,7 +17,7 @@ class PostDisplay extends React.Component {
 
     firebase.firestore().collection("publicTrees").doc(this.props.treeId).collection("posts")
     .doc(this.props.postId).collection("comments").orderBy("timestamp", "desc")
-    .get().then((querySnapshot) => {
+    .onSnapshot((querySnapshot) => {
 
       let incomingComments = []
 
@@ -33,37 +33,15 @@ class PostDisplay extends React.Component {
 
    }
 
-   componentDidUpdate(prevProps, prevState, snapshot) {
-
-    if (this.state !== prevState) {
-
-      firebase.firestore().collection("publicTrees").doc(this.props.treeId).collection("posts")
-      .doc(this.props.postId).collection("comments").orderBy("timestamp", "desc")
-      .get().then((querySnapshot) => {
-
-        let incomingComments = []
-
-        querySnapshot.forEach(function(doc) {
-          incomingComments.push(doc.data())
-        })
-
-        this.setState({
-          comments: incomingComments
-        })
-
-      })
-    } 
-  }
-
    render() {
   
   
    const commentstyle = {
       backgroundColor: "#F0F8FF",
       borderRadius: "15px",
+      border: "1px solid black",
       boxShadow: "0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)",
-      paddingLeft: "10px",
-      paddingRight: "10px",
+      padding: "10px",
       marginBottom: "10px"
    }
 
@@ -76,13 +54,12 @@ class PostDisplay extends React.Component {
           
           <Typography variant="h5" color="secondary" > {this.props.post.description} </Typography>
           <img src={this.props.post.imageUrl} style={{ borderRadius: "15px", marginTop: 10 }} alt="" width="100%" /> 
-          <Typography variant="h6" color="secondary"> Posted By: {this.props.post.postedBy} </Typography>
+          <Typography variant="h5" color="secondary"> {this.props.post.postedBy} </Typography>
           {this.props.post.timestamp ? 
-          <Typography align="right" variant="h6" color="secondary"> {this.props.post.timestamp.toDate().toLocaleDateString()} </Typography> :
+          <Typography align="right" variant="h5" color="secondary"> {this.props.post.timestamp.toDate().toLocaleDateString()} </Typography> :
           null
           }
         </div>
-        <hr />
         <div style={commentstyle} >
           {comments.length > 0 ? comments.map(comment => {
 
@@ -98,9 +75,27 @@ class PostDisplay extends React.Component {
                 <div key={comment.psudeoId}>
 
                 {comments[0].psudeoId === comment.psudeoId ? null : <hr/>}
+                
 
-                <Typography variant="h6" color="secondary"> <b>{comment.postedBy}:</b> {comment.comment} </Typography>
-                <Typography align="right" variant="h6" color="secondary"> {commentDate + " @ " + commentTime} </Typography>
+                <Typography 
+                variant="body1" 
+                color="secondary"
+                style={{
+                  display: "inline"
+                }}
+                > 
+                <b>{comment.postedBy}:</b> {comment.comment} 
+                </Typography>
+                <br />
+                {comment.exchangeAcorns > 0 ?
+                <div style={{display: "inline-flex"}}>
+                  <Typography variant="h6" color="secondary"> +{comment.exchangeAcorns} </Typography>
+                  <Avatar variant="square" src="/heart.svg" alt="Algo" style={{ paddingBottom: "5px", height: "40px", width: "40px"}} />
+                </div>
+                :
+                null
+                }
+                <Typography align="right" variant="body1" color="secondary"> {commentDate} </Typography>
                 </div>
               )
             

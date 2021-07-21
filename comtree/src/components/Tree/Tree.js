@@ -2,12 +2,12 @@ import React from "react"
 import firebase from "firebase/app"
 import "firebase/firestore"
 
-import PostDisplay from "./postDisplay"
-import Post from "./post"
-import Comment from "./comment"
-import TreeCare from "./treeCare"
-import EditTree from "./editTree"
-import FlagTree from "./flagTree"
+import PostDisplay from "./PostDisplay"
+import Post from "./Post"
+import Comment from "./Comment"
+import TreeCare from "./TreeCare"
+import EditTree from "./EditTree"
+import FlagTree from "./FlagTree"
 
 import { Button, Modal, Typography, Avatar, IconButton } from "@material-ui/core"
 import AccessibilityNewIcon from '@material-ui/icons/AccessibilityNew';
@@ -19,7 +19,6 @@ class Tree extends React.Component {
     super()
     this.state = {
       tree: null,
-      treeId: null,
       posts: [],
       postIds: [],
       post: null,
@@ -31,39 +30,30 @@ class Tree extends React.Component {
   }
 
   componentDidMount() {
-    firebase.firestore().collection("publicTrees").onSnapshot(snapshot => {
-      let thisTree = null
-      let thisId = null
+    firebase.firestore().collection("publicTrees").doc(this.props.tree).onSnapshot(doc => {
+      let thisTree = doc.data()
 
-      snapshot.docs.forEach(doc => {
-        if(doc.data().psudeoId === this.props.tree.psudeoId) {
-          thisTree = doc.data()
-          thisId = doc.id
+        firebase.firestore().collection("publicTrees").doc(this.props.tree).collection("posts")
+        .orderBy("timestamp", "desc")
+        .onSnapshot(snapshot => {
 
-          firebase.firestore().collection("publicTrees").doc(thisId).collection("posts")
-          .orderBy("timestamp", "desc")
-          .onSnapshot(querySnapshot => {
+          let incomingPosts = []
+          let incomingIds = []
 
-            let incomingPosts = []
-            let incomingIds = []
+          snapshot.forEach(function(doc) {
+            incomingPosts.push(doc.data())
+            incomingIds.push(doc.id)
+          })
 
-            querySnapshot.forEach(function(doc) {
-              incomingPosts.push(doc.data())
-              incomingIds.push(doc.id)
+            this.setState({
+              posts: incomingPosts,
+              postIds: incomingIds,
             })
 
-              this.setState({
-                posts: incomingPosts,
-                postIds: incomingIds,
-              })
-
-          })
-        }
-      })
+        })
       
         this.setState({
           tree: thisTree,
-          treeId: thisId
       })
       
     })
@@ -72,13 +62,13 @@ class Tree extends React.Component {
   hugTree(uid) {
 
     if (uid) {
-      firebase.firestore().collection("publicTrees").doc(this.state.treeId).update({
+      firebase.firestore().collection("publicTrees").doc(this.props.tree).update({
         huggedBy: firebase.firestore.FieldValue.arrayUnion(this.props.user.uid)
       })
     }
 
     else {
-      firebase.firestore().collection("publicTrees").doc(this.state.treeId).update({
+      firebase.firestore().collection("publicTrees").doc(this.props.tree).update({
         huggedBy: firebase.firestore.FieldValue.arrayRemove(this.props.user.uid)
       })
     }
@@ -175,7 +165,7 @@ class Tree extends React.Component {
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
-                <Post treeId={this.props.tree.psudeoId} user={this.props.user} setStatus={() => this.setState({status: ""})}/>
+                <Post treeId={this.props.tree} user={this.props.user} setStatus={() => this.setState({status: ""})}/>
                 </Modal> 
                 : 
                 null}
@@ -189,7 +179,7 @@ class Tree extends React.Component {
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
-                <TreeCare treeId={this.state.treeId} tree={this.state.tree} />
+                <TreeCare treeId={this.props.tree} tree={this.state.tree} />
                 </Modal> 
                 : 
                 null}
@@ -203,7 +193,7 @@ class Tree extends React.Component {
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
-                <EditTree tree={this.state.tree} treeId={this.state.treeId} posts={this.state.posts} postIds={this.state.postIds}/>
+                <EditTree tree={this.state.tree} treeId={this.props.tree} posts={this.state.posts} postIds={this.state.postIds}/>
                 </Modal> 
                 : 
                 null}
@@ -217,7 +207,7 @@ class Tree extends React.Component {
                   overflowY: "auto",
                   overflowX: "hidden"
                 }}>
-                <FlagTree treeId={this.state.treeId} />
+                <FlagTree treeId={this.props.tree} />
                 </Modal> 
                 : 
                 null}
@@ -246,11 +236,11 @@ class Tree extends React.Component {
                   overflowX: "hidden"
                 }}>
                 <div style={treestyle}>
-                <PostDisplay post={this.state.post} treeId={this.state.treeId} postId={this.state.postId} user={this.props.user} admins={this.props.admins} />
-                <Comment user={this.props.user} treeId={this.state.treeId} postId={this.state.postId} />
+                <PostDisplay post={this.state.post} treeId={this.props.tree} postId={this.state.postId} user={this.props.user} admins={this.props.admins} />
+                <Comment user={this.props.user} treeId={this.props.tree} postId={this.state.postId} post={this.state.post} />
                 </div>
                 </Modal>
- :
+                :
                 null}
               </div>
           

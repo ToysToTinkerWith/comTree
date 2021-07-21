@@ -4,9 +4,6 @@ import "firebase/firestore"
 
 import { Typography, Avatar, IconButton } from "@material-ui/core"
 
-
-let isMounted = false
-
 class PublicTreeCard extends React.Component {
   constructor() {
     super()
@@ -16,30 +13,12 @@ class PublicTreeCard extends React.Component {
   }
 
   componentDidMount() {
-    isMounted = true
-    firebase.firestore().collection("publicTrees").onSnapshot(snapshot => {
-      let thisTree = null
-
-      snapshot.docs.forEach(doc => {
-        if(doc.data().psudeoId === this.props.psudeoId) {
-          thisTree = doc.data()
-
-        }
-      })
-      
-      if (isMounted) {
+    firebase.firestore().collection("publicTrees").doc(this.props.treeId).onSnapshot(doc => {
         this.setState({
-          tree: thisTree,
+          tree: doc.data(),
       })
-      }
-      
     })
   }
-
-  componentWillUnmount(){
-    isMounted = false
-  }
-
 
 
   render() {
@@ -62,7 +41,7 @@ class PublicTreeCard extends React.Component {
 
                 <IconButton 
                   onClick={() => 
-                    {this.props.setTree(this.state.tree)
+                    {this.props.setTree(this.props.treeId)
                     this.props.setPage("Tree")}
                   }
                   >
