@@ -1,5 +1,5 @@
 # comTree
-comTree built with Next.js
+Built with Next.js
 
 comTree.org
 
